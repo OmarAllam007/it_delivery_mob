@@ -14,7 +14,7 @@ class Network {
 
   authData(data, apiUrl) async {
     var fullUrl = _url + apiUrl;
-    return await http.post(fullUrl,
+    return await http.post(Uri(path: fullUrl),
         body: jsonEncode(data), headers: _setHeaders());
   }
 
