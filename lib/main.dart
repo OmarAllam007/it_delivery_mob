@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:it_delivery/provider/request_provider.dart';
 import 'package:it_delivery/provider/services_provider.dart';
 import 'package:it_delivery/view/Login.dart';
 import 'package:it_delivery/view/SelectLocation.dart';
@@ -35,6 +36,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: ServicesProvider(),
         ),
+        ChangeNotifierProvider.value(
+          value: RequestProvider(),
+        ),
       ],
       child: MaterialApp(
         title: 'IT Delivery',
@@ -47,7 +51,7 @@ class MyApp extends StatelessWidget {
           '/select-service': (context) => SelectService(),
           SelectSubService.routeName: (context) => SelectSubService(),
           SelectItem.routeName: (context) => SelectItem(),
-          '/create-request': (context) => RequestForm(),
+          RequestForm.routeName: (context) => RequestForm(),
           '/select-location': (context) => SelectLocation(),
           // '/select-date': (context) => SelectDate(),
         },

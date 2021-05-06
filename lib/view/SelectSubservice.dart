@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:it_delivery/model/Service.dart';
 import 'package:it_delivery/provider/services_provider.dart';
+import 'package:it_delivery/view/RequestForm.dart';
 import 'package:it_delivery/view/SelectItem.dart';
 import 'package:provider/provider.dart';
 
@@ -9,18 +10,19 @@ class SelectSubService extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context).settings.arguments as Service;
-
+    final args = ModalRoute.of(context).settings.arguments as Map;
+    var service = args['service'] as Service;
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Subservices',
+          service.name + ' > Subservices',
           textAlign: TextAlign.center,
         ),
         backgroundColor: Colors.teal[800],
       ),
       body: FutureBuilder(
-        future: Provider.of<ServicesProvider>(context).getSubservices(args.id),
+        future:
+            Provider.of<ServicesProvider>(context).getSubservices(service.id),
         builder: (ctx, snapShot) {
           if (snapShot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -39,8 +41,11 @@ class SelectSubService extends StatelessWidget {
                       padding: const EdgeInsets.all(10.0),
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, SelectItem.routeName,
-                              arguments: subservice);
+                          Navigator.pushNamed(context, RequestForm.routeName,
+                              arguments: {
+                                'service': service,
+                                'subservice': subservice
+                              });
                         },
                         child: Card(
                           shape: RoundedRectangleBorder(
@@ -61,10 +66,11 @@ class SelectSubService extends StatelessWidget {
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.all(15.0),
+                                  padding: const EdgeInsets.all(10.0),
                                   child: Center(
                                     child: Text(
                                       subservice.name,
+                                      overflow: TextOverflow.fade,
                                     ),
                                   ),
                                 ),

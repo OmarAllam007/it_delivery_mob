@@ -1,16 +1,113 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:it_delivery/model/Request.dart';
+import 'package:it_delivery/model/Service.dart';
+import 'package:it_delivery/model/Subservice.dart';
+import 'package:it_delivery/provider/request_provider.dart';
+import 'package:provider/provider.dart';
 
 class RequestForm extends StatefulWidget {
+  static const routeName = '/request-form';
+
   @override
   _RequestFormState createState() => _RequestFormState();
 }
 
 class _RequestFormState extends State<RequestForm> {
   final _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
+  RequestModel request;
+
+  void _saveForm() async {
+    final isValid = _formKey.currentState.validate();
+    if (!isValid) {
+      return;
+    }
+    _formKey.currentState.save();
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await Provider.of<RequestProvider>(context, listen: false)
+          .store(request)
+          .then((value) async {
+        await showDialog(
+          context: context,
+          builder: (ctx) {
+            return AlertDialog(
+              content: Text(
+                'Ticket Created successfully',
+                textAlign: TextAlign.center,
+              ),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Ok'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    // Navigator.pushAndRemoveUntil(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => TicketsScreen()),
+                    //     ModalRoute.withName(TicketsScreen.routeName));
+                  },
+                )
+              ],
+            );
+          },
+        );
+
+        request.files = [];
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    } catch (error) {
+      await showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text('An error occurred!'),
+          content: Text('Something went wrong.'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Okay'),
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+            )
+          ],
+        ),
+      );
+    }
+  }
+
+  void _openFileExplorer() async {
+    try {
+      await FilePicker.platform.pickFiles(
+          allowMultiple: true,
+          type: FileType.custom,
+          allowedExtensions: [
+            'jpg',
+            'jpeg',
+            'png',
+            'pdf',
+            'doc'
+          ]).then((value) {
+        // value.forEach((key, value) => ticket.files.add(value));
+      });
+    } on PlatformException catch (e) {
+      print("Unsupported operation" + e.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context).settings.arguments as Map;
+    final serviceArgs = args['service'] as Service;
+    final subserviceArgs = args['subservice'] as Subservice;
+
     final appBar = AppBar(
       title: Text('Request Details'),
       backgroundColor: Colors.teal[800],
@@ -35,6 +132,7 @@ class _RequestFormState extends State<RequestForm> {
                 children: [
                   Column(
                     children: [
+                      Text(serviceArgs.name + ' > ' + subserviceArgs.name),
                       TextFormField(
                         decoration: InputDecoration(
                           labelText: 'Subject',
@@ -104,7 +202,9 @@ class _RequestFormState extends State<RequestForm> {
                             child: Center(
                               child: Text('Upload Images'),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              _openFileExplorer();
+                            },
                           ),
                         ),
                       ),

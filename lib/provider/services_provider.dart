@@ -27,7 +27,6 @@ class ServicesProvider with ChangeNotifier {
 
   Future<List<dynamic>> callUrl({url, params = ''}) async {
     var urlLink = Uri.parse(APP_URL + url);
-    print(urlLink);
     final response = await http.get(
       urlLink,
     );
@@ -57,7 +56,6 @@ class ServicesProvider with ChangeNotifier {
     try {
       await callUrl(url: 'subservices/$serviceId').then((data) {
         data.forEach((subservice) {
-          print(subservice);
           _subservices.add(
             Subservice(
               id: subservice['id'],
@@ -73,7 +71,6 @@ class ServicesProvider with ChangeNotifier {
 
   Future<void> getItems(subserviceId) async {
     _items = [];
-    print(subserviceId);
     try {
       await callUrl(url: 'items/$subserviceId').then((data) {
         data.forEach((item) {

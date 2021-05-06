@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:it_delivery/model/Service.dart';
 import 'package:it_delivery/model/Subservice.dart';
 import 'package:it_delivery/provider/services_provider.dart';
+import 'package:it_delivery/view/RequestForm.dart';
 import 'package:provider/provider.dart';
 
 class SelectItem extends StatelessWidget {
@@ -38,7 +39,10 @@ class SelectItem extends StatelessWidget {
                     return Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.pushNamed(context, RequestForm.routeName,
+                              arguments: item.id);
+                        },
                         child: Card(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(

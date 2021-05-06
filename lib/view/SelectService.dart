@@ -36,7 +36,7 @@ class SelectService extends StatelessWidget {
                         onTap: () {
                           Navigator.pushNamed(
                               context, SelectSubService.routeName,
-                              arguments: service);
+                              arguments: {'service': service});
                         },
                         child: Card(
                           shape: RoundedRectangleBorder(
