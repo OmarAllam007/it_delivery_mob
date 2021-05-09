@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:it_delivery/provider/location_provider.dart';
 import 'package:it_delivery/provider/request_provider.dart';
 import 'package:it_delivery/provider/services_provider.dart';
 import 'package:it_delivery/view/Login.dart';
+import 'package:it_delivery/view/MainScreen.dart';
 import 'package:it_delivery/view/SelectLocation.dart';
 import 'package:provider/provider.dart';
 import './view/RequestForm.dart';
@@ -12,18 +14,7 @@ import './view/SelectItem.dart';
 import './view/SelectService.dart';
 import './view/SelectSubservice.dart';
 
-// class MyHttpOverrides extends HttpOverrides {
-//   @override
-//   HttpClient createHttpClient(SecurityContext context) {
-//     return super.createHttpClient(context)
-//       ..badCertificateCallback =
-//           (X509Certificate cert, String host, int port) => true;
-//   }
-// }
-
 void main() {
-  // HttpOverrides.global = new MyHttpOverrides();
-
   runApp(MyApp());
 }
 
@@ -39,20 +30,23 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: RequestProvider(),
         ),
+        ChangeNotifierProvider.value(
+          value: LocationProvider(),
+        ),
       ],
       child: MaterialApp(
         title: 'IT Delivery',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: SelectService(),
+        home: MainScreen(),
         initialRoute: '/',
         routes: {
-          '/select-service': (context) => SelectService(),
+          SelectService.routeName: (context) => SelectService(),
           SelectSubService.routeName: (context) => SelectSubService(),
           SelectItem.routeName: (context) => SelectItem(),
           RequestForm.routeName: (context) => RequestForm(),
-          '/select-location': (context) => SelectLocation(),
+          SelectLocation.routeName: (context) => SelectLocation(),
           // '/select-date': (context) => SelectDate(),
         },
       ),

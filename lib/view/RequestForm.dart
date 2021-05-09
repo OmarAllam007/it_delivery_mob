@@ -1,6 +1,9 @@
+import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:http/http.dart';
+import 'package:it_delivery/model/Location.dart';
 import 'package:it_delivery/model/Request.dart';
 import 'package:it_delivery/model/Service.dart';
 import 'package:it_delivery/model/Subservice.dart';
@@ -16,19 +19,14 @@ class RequestForm extends StatefulWidget {
 
 class _RequestFormState extends State<RequestForm> {
   final _formKey = GlobalKey<FormState>();
-  bool _isLoading = false;
-  RequestModel request;
+  int _currentIndex = 0;
 
-  void _saveForm() async {
+  void _saveForm(RequestModel request) async {
     final isValid = _formKey.currentState.validate();
     if (!isValid) {
       return;
     }
     _formKey.currentState.save();
-
-    setState(() {
-      _isLoading = true;
-    });
 
     try {
       await Provider.of<RequestProvider>(context, listen: false)
@@ -39,11 +37,11 @@ class _RequestFormState extends State<RequestForm> {
           builder: (ctx) {
             return AlertDialog(
               content: Text(
-                'Ticket Created successfully',
+                'Request Created successfully',
                 textAlign: TextAlign.center,
               ),
               actions: <Widget>[
-                FlatButton(
+                TextButton(
                   child: Text('Ok'),
                   onPressed: () {
                     Navigator.pop(context);
@@ -60,9 +58,6 @@ class _RequestFormState extends State<RequestForm> {
         );
 
         request.files = [];
-        setState(() {
-          _isLoading = false;
-        });
       });
     } catch (error) {
       await showDialog(
@@ -105,8 +100,7 @@ class _RequestFormState extends State<RequestForm> {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context).settings.arguments as Map;
-    final serviceArgs = args['service'] as Service;
-    final subserviceArgs = args['subservice'] as Subservice;
+    final requestModal = args['formModel'] as RequestModel;
 
     final appBar = AppBar(
       title: Text('Request Details'),
@@ -132,7 +126,6 @@ class _RequestFormState extends State<RequestForm> {
                 children: [
                   Column(
                     children: [
-                      Text(serviceArgs.name + ' > ' + subserviceArgs.name),
                       TextFormField(
                         decoration: InputDecoration(
                           labelText: 'Subject',
@@ -149,6 +142,9 @@ class _RequestFormState extends State<RequestForm> {
                             return 'Subject is required';
                           }
                           return null;
+                        },
+                        onSaved: (value) {
+                          requestModal.subject = value;
                         },
                       ),
                       TextFormField(
@@ -171,6 +167,9 @@ class _RequestFormState extends State<RequestForm> {
                           }
                           return null;
                         },
+                        onSaved: (value) {
+                          requestModal.description = value;
+                        },
                       ),
                       TextFormField(
                         decoration: InputDecoration(
@@ -188,6 +187,9 @@ class _RequestFormState extends State<RequestForm> {
                             return 'Mobile is required';
                           }
                           return null;
+                        },
+                        onSaved: (value) {
+                          requestModal.mobile = value;
                         },
                       ),
                       Padding(
@@ -224,7 +226,7 @@ class _RequestFormState extends State<RequestForm> {
                             child: Text('Create Request'),
                           ),
                           onPressed: () {
-                            Navigator.pushNamed(context, '/select-location');
+                            _saveForm(requestModal);
                           },
                         ),
                       ),

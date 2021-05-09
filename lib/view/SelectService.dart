@@ -1,9 +1,12 @@
+import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:it_delivery/provider/services_provider.dart';
 import 'package:it_delivery/view/SelectSubservice.dart';
 import 'package:provider/provider.dart';
 
 class SelectService extends StatelessWidget {
+  static const routeName = '/select-service';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

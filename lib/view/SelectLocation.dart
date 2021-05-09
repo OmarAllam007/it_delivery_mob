@@ -3,6 +3,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:it_delivery/model/Request.dart';
+import 'package:it_delivery/model/Service.dart';
+import 'package:it_delivery/model/Subservice.dart';
+import 'package:it_delivery/view/RequestForm.dart';
+import 'package:it_delivery/view/SelectLocationWidget.dart';
 
 Future<Position> _determinePosition() async {
   bool serviceEnabled;
@@ -29,19 +34,22 @@ Future<Position> _determinePosition() async {
   }
 
   var location = await Geolocator.getCurrentPosition();
-  print(location);
-  print('asdas');
   return location;
 }
 
 class SelectLocation extends StatefulWidget {
+  static const routeName = '/select-location';
+
   @override
   _SelectLocationState createState() => _SelectLocationState();
 }
 
 enum LocationTypes { home, work, other }
 
-class _SelectLocationState extends State<SelectLocation> {
+class _SelectLocationState extends State<SelectLocation>
+    with AutomaticKeepAliveClientMixin {
+  bool get wantKeepAlive => true;
+
   Future<Position> _future;
   List<Marker> markers = [];
   GoogleMapController gmc;
@@ -52,6 +60,9 @@ class _SelectLocationState extends State<SelectLocation> {
   double long;
   String label;
   int type;
+
+  String serviceId;
+  String subserviceId;
 
   @override
   void initState() {
@@ -66,6 +77,13 @@ class _SelectLocationState extends State<SelectLocation> {
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context).settings.arguments as Map;
+    var service = args['service'] as Service;
+    var subservice = args['subservice'] as Subservice;
+
+    this.serviceId = service.id.toString();
+    this.subserviceId = subservice.id.toString();
+
     final appBar = AppBar(
       title: Text('Select Location'),
       backgroundColor: Colors.teal[800],
@@ -120,10 +138,7 @@ class _SelectLocationState extends State<SelectLocation> {
                         ),
                       ),
                       onPressed: () {
-
-                        print(this.lat);
-                        print(this.long);
-                        // _showSaveLocationForm(context);
+                        _showSaveLocationForm(context);
                       },
                       child: Text('Save Location'),
                     ),
@@ -176,155 +191,17 @@ class _SelectLocationState extends State<SelectLocation> {
   }
 
   void _showSaveLocationForm(BuildContext context) {
+    RequestModel form = new RequestModel();
+    form.service = this.serviceId;
+    form.subservice = this.subserviceId;
+
     var alert = showDialog(
         context: context,
         builder: (ctx) {
           return SelectLocationWidget(
             location: LatLng(this.lat, this.long),
+            form: form,
           );
         });
-  }
-}
-
-class SelectLocationWidget extends StatefulWidget {
-  LatLng location;
-
-  @override
-  _SelectLocationWidgetState createState() => _SelectLocationWidgetState();
-
-  SelectLocationWidget({this.location});
-}
-
-class _SelectLocationWidgetState extends State<SelectLocationWidget> {
-  final GlobalKey<FormState> _formKey = GlobalKey();
-  List<bool> isSelected = [true, false, false];
-
-  void _formSave() {
-    var isValid = _formKey.currentState.validate();
-
-    if (isValid) {
-      // Navigator.of(context).pushNamed(SelectService.routeName);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    print(this.widget.location);
-    return AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(10),
-        ),
-      ),
-      title: Text('Location Name'),
-      content: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextFormField(
-              // initialValue: 'Home, Work, ...',
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Location name is required.';
-                }
-              },
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            ToggleButtons(
-              // selectedBorderColor: Colors.black,
-              selectedColor: Colors.white,
-              borderWidth: 1.2,
-              fillColor: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.circular(10),
-
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.home,
-                        size: 20,
-                      ),
-                      SizedBox(
-                        width: 2.0,
-                      ),
-                      Text(
-                        'Home',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.work,
-                        size: 20,
-                      ),
-                      SizedBox(
-                        width: 2.0,
-                      ),
-                      Text(
-                        'Work',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.radio_button_checked,
-                        size: 20,
-                      ),
-                      SizedBox(
-                        width: 2.0,
-                      ),
-                      Text(
-                        'Other',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-              onPressed: (int index) {
-                setState(() {
-                  for (int i = 0; i < isSelected.length; i++) {
-                    isSelected[i] = i == index;
-                  }
-                });
-              },
-              isSelected: isSelected,
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            RaisedButton(
-              color: Theme.of(context).primaryColor,
-              textColor: Colors.white,
-              shape: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none),
-              onPressed: _formSave,
-              child: Text('Save'),
-            )
-          ],
-        ),
-      ),
-    );
   }
 }

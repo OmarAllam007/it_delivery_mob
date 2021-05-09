@@ -3,6 +3,7 @@ import 'package:it_delivery/model/Service.dart';
 import 'package:it_delivery/provider/services_provider.dart';
 import 'package:it_delivery/view/RequestForm.dart';
 import 'package:it_delivery/view/SelectItem.dart';
+import 'package:it_delivery/view/SelectLocation.dart';
 import 'package:provider/provider.dart';
 
 class SelectSubService extends StatelessWidget {
@@ -12,6 +13,7 @@ class SelectSubService extends StatelessWidget {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context).settings.arguments as Map;
     var service = args['service'] as Service;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -41,7 +43,7 @@ class SelectSubService extends StatelessWidget {
                       padding: const EdgeInsets.all(10.0),
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, RequestForm.routeName,
+                          Navigator.pushNamed(context, SelectLocation.routeName,
                               arguments: {
                                 'service': service,
                                 'subservice': subservice
