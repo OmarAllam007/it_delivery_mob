@@ -1,5 +1,7 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:it_delivery/UserProfile.dart';
+import 'package:it_delivery/view/NotificationScreen.dart';
 import 'package:it_delivery/view/RequestsScreen.dart';
 import 'package:it_delivery/view/SelectService.dart';
 
@@ -15,8 +17,9 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    List screens = [RequestsScreen(), NotificationScreen(), UserProfile()];
     return Scaffold(
-      body: RequestsScreen(),
+      body: screens[_currentIndex],
       bottomNavigationBar: BottomNavyBar(
         selectedIndex: _currentIndex,
         showElevation: true, // use this to remove appBar's elevation
@@ -31,21 +34,22 @@ class _MainScreenState extends State<MainScreen> {
             title: Text('Requests'),
             activeColor: Colors.teal.shade600,
           ),
-          BottomNavyBarItem(
-            icon: Icon(Icons.people),
-            title: Text('Users'),
-            activeColor: Colors.teal.shade700,
-          ),
+
           BottomNavyBarItem(
             icon: Icon(Icons.notifications),
             title: Text('Notifications'),
             activeColor: Colors.teal.shade600,
           ),
           BottomNavyBarItem(
-            icon: Icon(Icons.settings),
+            icon: Icon(Icons.person),
             title: Text('Profile'),
             activeColor: Colors.teal.shade700,
           ),
+          // BottomNavyBarItem(
+          //   icon: Icon(Icons.settings),
+          //   title: Text('Profile'),
+          //   activeColor: Colors.teal.shade700,
+          // ),
         ],
       ),
     );

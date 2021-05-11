@@ -1,5 +1,5 @@
 class RequestModel {
-  String id;
+  int id;
   String subject;
   String description;
   String service;
@@ -10,16 +10,21 @@ class RequestModel {
   String serviceDesc = '';
   String subserviceDesc = '';
   String requester = '';
+  String created_date = '';
+  String status = '';
 
   RequestModel(
-      {this.subject,
+      {this.id,
+      this.subject,
       this.description,
       this.service,
       this.subservice,
+      this.status,
       this.files,
       this.location_id,
       this.mobile,
       this.requester,
       this.serviceDesc,
-      this.subserviceDesc});
+      this.subserviceDesc,
+      this.created_date});
 }

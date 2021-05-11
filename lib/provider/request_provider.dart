@@ -16,19 +16,23 @@ class RequestProvider with ChangeNotifier {
 
   Future<void> index() async {
     _requests = [];
-    Map map;
     try {
       final url = APP_URL + 'request/index';
 
       var response = await Dio().get(url);
-      var data = response.data as List<dynamic>;
-      print(data);
+      var data = response.data as List;
+
       data.forEach((request) {
-        print(request);
-        _requests.add(RequestModel(
+        _requests.add(
+          RequestModel(
+            id: request['id'],
             description: request['description'],
             subject: request['subject'],
-            requester: request['requester']));
+            requester: request['requester'],
+            created_date: request['created_at'],
+            status: request['status'],
+          ),
+        );
       });
     } catch (error) {}
   }
