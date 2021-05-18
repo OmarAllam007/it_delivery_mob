@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
@@ -8,20 +9,56 @@ import 'package:it_delivery/model/Request.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RequestProvider with ChangeNotifier {
+  Stream<List<RequestModel>> stream;
+  bool hasMoreRequests;
+  bool isLoading;
   List<RequestModel> _requests = [];
+  StreamController<List<RequestModel>> _controller;
+  int lastId = 0;
+
+  RequestProvider() {
+    _controller = StreamController<List<RequestModel>>.broadcast();
+    isLoading = false;
+    stream = _controller.stream;
+  }
 
   List<RequestModel> get requests {
     return [..._requests];
   }
 
-  Future<void> index() async {
+  Future<void> refresh() {
+    return loadMore(clearData: true);
+  }
+
+  Future<void> loadMore({bool clearData = false}) {
+    if (clearData) {
+      lastId = 0;
+      hasMoreRequests = true;
+    }
+
+    if (isLoading || !hasMoreRequests) {
+      return Future.value();
+    }
+    isLoading = true;
+    return index(lastIndex: lastId).then((data) {
+      isLoading = false;
+      _requests.addAll(data);
+
+      hasMoreRequests = data.length != 0;
+      _controller.add(_requests);
+      lastId = _requests.last.id;
+      notifyListeners();
+    }).catchError((error) {
+      isLoading = false;
+    });
+  }
+
+  Future<List<RequestModel>> index({lastIndex = 0}) async {
     _requests = [];
     try {
-      final url = APP_URL + 'request/index';
-
+      final url = APP_URL + 'request/index?lastIndex=$lastIndex';
       var response = await Dio().get(url);
       var data = response.data as List;
-
       data.forEach((request) {
         _requests.add(
           RequestModel(
@@ -35,6 +72,7 @@ class RequestProvider with ChangeNotifier {
         );
       });
     } catch (error) {}
+    return requests;
   }
 
   Future<void> store(RequestModel request) async {

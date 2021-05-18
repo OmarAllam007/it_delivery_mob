@@ -3,8 +3,41 @@ import 'package:it_delivery/provider/request_provider.dart';
 import 'package:it_delivery/view/SelectService.dart';
 import 'package:provider/provider.dart';
 
-class RequestsScreen extends StatelessWidget {
+class RequestsScreen extends StatefulWidget {
   const RequestsScreen({Key key}) : super(key: key);
+
+  @override
+  _RequestsScreenState createState() => _RequestsScreenState();
+}
+
+class _RequestsScreenState extends State<RequestsScreen> {
+  ScrollController _scrollController = ScrollController();
+  RequestProvider provider;
+
+  var _currentIndex = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    provider = RequestProvider();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        // _getMoreRequests();
+        provider.loadMore();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _scrollController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +72,8 @@ class RequestsScreen extends StatelessWidget {
             ],
           ),
         ),
-        body: FutureBuilder(
-          future: Provider.of<RequestProvider>(context).index(),
+        body: StreamBuilder(
+          stream: provider.stream,
           builder: (ctx, snapShot) {
             if (snapShot.connectionState == ConnectionState.waiting) {
               return Center(
@@ -53,9 +86,12 @@ class RequestsScreen extends StatelessWidget {
               return Consumer<RequestProvider>(
                 builder: (ctx, data, child) {
                   return ListView.builder(
+                    controller: _scrollController,
                     itemBuilder: (ctx, index) {
                       final request = data.requests[index];
-
+                      if (index == data.requests.length) {
+                        return CircularProgressIndicator();
+                      }
                       return Container(
                         height: MediaQuery.of(context).size.height / 5,
                         child: Padding(
@@ -81,7 +117,7 @@ class RequestsScreen extends StatelessWidget {
                                         Expanded(
                                           flex: 3,
                                           child: Padding(
-                                            padding: const EdgeInsets.all(15.0),
+                                            padding: const EdgeInsets.all(10.0),
                                             child: Text(
                                               'Request #' +
                                                   request.id.toString(),
