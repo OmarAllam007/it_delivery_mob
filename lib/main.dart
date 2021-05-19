@@ -7,6 +7,7 @@ import 'package:it_delivery/provider/services_provider.dart';
 import 'package:it_delivery/view/Login.dart';
 import 'package:it_delivery/view/MainScreen.dart';
 import 'package:it_delivery/view/SelectLocation.dart';
+import 'package:it_delivery/view/ShowRequest.dart';
 import 'package:provider/provider.dart';
 import './view/RequestForm.dart';
 import './view/SelectItem.dart';
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
           SelectItem.routeName: (context) => SelectItem(),
           RequestForm.routeName: (context) => RequestForm(),
           SelectLocation.routeName: (context) => SelectLocation(),
+          ShowRequest.routeName: (context) => ShowRequest(),
           // '/select-date': (context) => SelectDate(),
         },
       ),

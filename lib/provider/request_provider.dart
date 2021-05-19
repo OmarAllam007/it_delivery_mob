@@ -6,73 +6,94 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:it_delivery/helpers/env.dart';
 import 'package:it_delivery/model/Request.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class RequestProvider with ChangeNotifier {
   Stream<List<RequestModel>> stream;
   bool hasMoreRequests;
+
   bool isLoading;
-  List<RequestModel> _requests = [];
+  List<RequestModel> _data;
   StreamController<List<RequestModel>> _controller;
+
   int lastId = 0;
+  int filterType = 0;
+  var _token;
 
   RequestProvider() {
+    _data = [];
     _controller = StreamController<List<RequestModel>>.broadcast();
     isLoading = false;
-    stream = _controller.stream;
-  }
 
-  List<RequestModel> get requests {
-    return [..._requests];
+    stream = _controller.stream;
+    hasMoreRequests = true;
+
+    refresh();
   }
 
   Future<void> refresh() {
     return loadMore(clearData: true);
   }
 
+  Future<List<RequestModel>> getRequests() async {
+    try {
+      print(lastId);
+      final url = APP_URL + 'request/index?lastIndex=$lastId';
+
+      // final prefs = await SharedPreferences.getInstance();
+      // _token = prefs.getString("token");
+      // print(_token);
+      final response = await http.get(Uri.parse(url));
+      final List<RequestModel> finalList = [];
+      final data = json.decode(response.body) as List<dynamic>;
+
+      data.forEach((item) {
+        finalList.add(RequestModel(
+          id: item['id'],
+          subject: item['subject'],
+          description: item['description'],
+          // category: item['category'],
+          // subcategory: item['subcategory'],
+          // item: item['item'],
+          requester: item['requester'],
+          // coordinator: item['coordinator'],
+          status: item['status'],
+          // dueDate: item['due_date'],
+          created_date: item['created_at'],
+        ));
+      });
+
+      return finalList;
+    } catch (error) {
+      throw error;
+    }
+
+    return Future.value();
+  }
+
   Future<void> loadMore({bool clearData = false}) {
     if (clearData) {
       lastId = 0;
+      _data = List<RequestModel>();
       hasMoreRequests = true;
     }
 
     if (isLoading || !hasMoreRequests) {
       return Future.value();
     }
+
     isLoading = true;
-    return index(lastIndex: lastId).then((data) {
+    return getRequests().then((data) {
       isLoading = false;
-      _requests.addAll(data);
+      _data.addAll(data);
 
       hasMoreRequests = data.length != 0;
-      _controller.add(_requests);
-      lastId = _requests.last.id;
+      _controller.add(_data);
+      lastId = _data.last.id;
+
       notifyListeners();
     }).catchError((error) {
       isLoading = false;
     });
-  }
-
-  Future<List<RequestModel>> index({lastIndex = 0}) async {
-    _requests = [];
-    try {
-      final url = APP_URL + 'request/index?lastIndex=$lastIndex';
-      var response = await Dio().get(url);
-      var data = response.data as List;
-      data.forEach((request) {
-        _requests.add(
-          RequestModel(
-            id: request['id'],
-            description: request['description'],
-            subject: request['subject'],
-            requester: request['requester'],
-            created_date: request['created_at'],
-            status: request['status'],
-          ),
-        );
-      });
-    } catch (error) {}
-    return requests;
   }
 
   Future<void> store(RequestModel request) async {
