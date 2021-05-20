@@ -11,7 +11,10 @@ class RequestModel {
   String subserviceDesc = '';
   String requester = '';
   String created_date = '';
+  String close_date = '';
+  String last_updated_date = '';
   String status = '';
+  int status_id;
 
   RequestModel(
       {this.id,
@@ -26,5 +29,8 @@ class RequestModel {
       this.requester,
       this.serviceDesc,
       this.subserviceDesc,
-      this.created_date});
+      this.created_date,
+      this.close_date,
+      this.last_updated_date,
+      this.status_id});
 }

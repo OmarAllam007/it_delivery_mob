@@ -10,14 +10,19 @@ import 'package:it_delivery/model/Request.dart';
 class RequestProvider with ChangeNotifier {
   Stream<List<RequestModel>> stream;
   bool hasMoreRequests;
-
   bool isLoading;
+
   List<RequestModel> _data;
   StreamController<List<RequestModel>> _controller;
 
   int lastId = 0;
   int filterType = 0;
+  int dataLength = 0;
   var _token;
+
+  hasRequests() {
+    return _data.length > 1;
+  }
 
   RequestProvider() {
     _data = [];
@@ -36,8 +41,8 @@ class RequestProvider with ChangeNotifier {
 
   Future<List<RequestModel>> getRequests() async {
     try {
-      print(lastId);
-      final url = APP_URL + 'request/index?lastIndex=$lastId';
+      final url =
+          APP_URL + 'request/index?lastIndex=$lastId&filterType=$filterType';
 
       // final prefs = await SharedPreferences.getInstance();
       // _token = prefs.getString("token");
@@ -47,19 +52,21 @@ class RequestProvider with ChangeNotifier {
       final data = json.decode(response.body) as List<dynamic>;
 
       data.forEach((item) {
-        finalList.add(RequestModel(
-          id: item['id'],
-          subject: item['subject'],
-          description: item['description'],
-          // category: item['category'],
-          // subcategory: item['subcategory'],
-          // item: item['item'],
-          requester: item['requester'],
-          // coordinator: item['coordinator'],
-          status: item['status'],
-          // dueDate: item['due_date'],
-          created_date: item['created_at'],
-        ));
+        finalList.add(
+          RequestModel(
+            id: item['id'],
+            subject: item['subject'],
+            description: item['description'],
+            serviceDesc: item['serviceDesc'],
+            subserviceDesc: item['subserviceDesc'],
+            requester: item['requester'],
+            status: item['status'],
+            status_id: item['status_id'],
+            created_date: item['created_at'],
+            close_date: item['close_date'],
+            last_updated_date: item['updated_at'],
+          ),
+        );
       });
 
       return finalList;
@@ -87,8 +94,10 @@ class RequestProvider with ChangeNotifier {
       _data.addAll(data);
 
       hasMoreRequests = data.length != 0;
+      dataLength = _data.length;
       _controller.add(_data);
       lastId = _data.last.id;
+      isLoading = false;
 
       notifyListeners();
     }).catchError((error) {

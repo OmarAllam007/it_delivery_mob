@@ -49,6 +49,11 @@ class _RequestsScreenState extends State<RequestsScreen> {
           title: Text('Requests'),
           backgroundColor: Colors.teal.shade800,
           bottom: TabBar(
+            onTap: (index) {
+              provider.filterType = index;
+              provider.loadMore(clearData: true);
+              setState(() {});
+            },
             indicatorColor: Colors.teal.shade100,
             tabs: [
               Tab(
@@ -87,14 +92,15 @@ class _RequestsScreenState extends State<RequestsScreen> {
                       return RequestTile(
                         request: request,
                       );
-                    } else if (provider.hasMoreRequests) {
+                    } else if (provider.hasMoreRequests &&
+                        provider.dataLength > 5) {
                       return Padding(
                         padding: EdgeInsets.symmetric(vertical: 20),
                         child: Center(
                           child: CircularProgressIndicator(
                             backgroundColor: Colors.white,
                             valueColor: new AlwaysStoppedAnimation<Color>(
-                                Theme.of(context).primaryColor),
+                                Theme.of(context).accentColor),
                           ),
                         ),
                       );
@@ -107,7 +113,9 @@ class _RequestsScreenState extends State<RequestsScreen> {
                             // color: Colors.red,
                             child: Center(
                               child: Text(
-                                '🧐 No requests found!',
+                                provider.dataLength == 0
+                                    ? '🧐 No requests found!'
+                                    : '',
                                 style: TextStyle(
                                     color: Colors.teal.shade900,
                                     fontSize: 18,

@@ -9,6 +9,9 @@ class RequestTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      constraints: BoxConstraints(
+        maxHeight: double.infinity,
+      ),
       height: MediaQuery.of(context).size.height / 5,
       child: Padding(
         padding: const EdgeInsets.all(5.0),
@@ -43,17 +46,14 @@ class RequestTile extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Expanded(
-                        flex: 1,
-                        child: Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Text(
-                            request.created_date ?? '',
-                            style: TextStyle(
-                                color: Colors.teal.shade800,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                          ),
+                      Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Text(
+                          request.created_date ?? '',
+                          style: TextStyle(
+                              color: Colors.teal.shade800,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
@@ -70,6 +70,8 @@ class RequestTile extends StatelessWidget {
                                 color: Colors.teal.shade800,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ),
@@ -77,28 +79,34 @@ class RequestTile extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(15, 15, 0, 5),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.teal.shade200,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(5),
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.teal.shade200,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5),
+                              ),
                             ),
-                          ),
-                          // color: Colors.grey,
-                          width: MediaQuery.of(context).size.width / 6,
-                          child: Center(
-                            child: Text(
-                              'Status',
-                              style: TextStyle(
-                                  color: Colors.teal.shade800,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold),
+                            // color: Colors.grey,
+                            width: MediaQuery.of(context).size.width / 6,
+                            child: Center(
+                              child: Text(
+                                request.status,
+                                style: TextStyle(
+                                    color: Colors.teal.shade800,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
                           ),
                         ),
                       ),
+                      // Expanded(
+                      //   child: Text(''),
+                      // )
                     ],
                   ),
                 ],

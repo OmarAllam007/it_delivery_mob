@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:it_delivery/model/Request.dart';
+import 'package:it_delivery/view/Request/Show/tracking_view.dart';
+import 'package:timelines/timelines.dart';
 
 class ShowRequest extends StatefulWidget {
   static const routeName = 'show-request';
@@ -61,7 +63,7 @@ class _ShowRequestState extends State<ShowRequest> {
                           color: Colors.teal.shade800,
                         ),
                         Text(
-                          'Status',
+                          request.status,
                           style: TextStyle(fontSize: 16),
                         ),
                       ],
@@ -77,7 +79,7 @@ class _ShowRequestState extends State<ShowRequest> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
-                        height: height * 0.22,
+                        height: height * 0.30,
                         child: Card(
                           elevation: 2,
                           color: Colors.white,
@@ -92,9 +94,8 @@ class _ShowRequestState extends State<ShowRequest> {
                                     children: [
                                       Expanded(
                                         child: Text(
-                                          'Description alsda;loksdjasd.,akms;dlasmd Description alsda;loksdjasd.,akms;dlasmd',
-                                          softWrap: true,
-                                          overflow: TextOverflow.fade,
+                                          request.description,
+                                          overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16,
@@ -113,19 +114,20 @@ class _ShowRequestState extends State<ShowRequest> {
                                   child: Row(
                                     children: [
                                       Icon(Icons.apps),
-                                      Text('Category > SubCategory')
+                                      Text(
+                                          '${request.serviceDesc} > ${request.subserviceDesc}')
                                     ],
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 10,
+                                  height: 5,
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Row(
                                     children: [
                                       Icon(Icons.calendar_today_rounded),
-                                      Text('Date')
+                                      Text('${request.created_date}')
                                     ],
                                   ),
                                 ),
@@ -139,25 +141,37 @@ class _ShowRequestState extends State<ShowRequest> {
                 ],
               ),
 
+              //request tracking indicator
+              TrackingView(height: height, request: request),
               Row(
                 children: [
-                  ExpansionTile(
-                    title: Text(
-                      'ererer',
-                      style: TextStyle(
-                          fontSize: 16.0, fontWeight: FontWeight.w500),
-                    ),
-                    children: <Widget>[
-                      ListTile(
-                        title: Text(
-                          'ererer',
-                          style: TextStyle(fontWeight: FontWeight.w700),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        height: height * 0.30,
+                        child: Card(
+                          elevation: 2,
+                          color: Colors.white,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ElevatedButton(
+                                  style: ,
+                                  onPressed: () {},
+                                  child: const Text('Enabled'),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                      )
-                    ],
+                      ),
+                    ),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),
