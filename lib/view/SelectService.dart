@@ -1,6 +1,7 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:it_delivery/provider/services_provider.dart';
+import 'package:it_delivery/view/Custom/Loader.dart';
 import 'package:it_delivery/view/SelectSubservice.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +23,7 @@ class SelectService extends StatelessWidget {
         builder: (ctx, snapShot) {
           if (snapShot.connectionState == ConnectionState.waiting) {
             return Center(
-              child: CircularProgressIndicator(),
+              child: LoaderWidget(),
             );
           } else {
             return Consumer<ServicesProvider>(
@@ -34,7 +35,7 @@ class SelectService extends StatelessWidget {
                     final service = data.services[index];
 
                     return Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(5.0),
                       child: GestureDetector(
                         onTap: () {
                           Navigator.pushNamed(
@@ -55,8 +56,8 @@ class SelectService extends StatelessWidget {
                                       const EdgeInsets.fromLTRB(0, 15, 0, 0),
                                   child: Image.asset(
                                     'asset/images/icon.png',
-                                    fit: BoxFit.fitHeight,
-                                    width: 100,
+                                    fit: BoxFit.fitWidth,
+                                    width: MediaQuery.of(context).size.width / 4,
                                   ),
                                 ),
                                 Padding(

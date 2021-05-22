@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:it_delivery/model/Service.dart';
 import 'package:it_delivery/provider/services_provider.dart';
+import 'package:it_delivery/view/Custom/Loader.dart';
 import 'package:it_delivery/view/RequestForm.dart';
 import 'package:it_delivery/view/SelectItem.dart';
 import 'package:it_delivery/view/SelectLocation.dart';
@@ -17,7 +18,7 @@ class SelectSubService extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          service.name + ' > Subservices',
+          service.name,
           textAlign: TextAlign.center,
         ),
         backgroundColor: Colors.teal[800],
@@ -28,7 +29,7 @@ class SelectSubService extends StatelessWidget {
         builder: (ctx, snapShot) {
           if (snapShot.connectionState == ConnectionState.waiting) {
             return Center(
-              child: CircularProgressIndicator(),
+              child: LoaderWidget(),
             );
           } else {
             return Consumer<ServicesProvider>(
@@ -64,7 +65,8 @@ class SelectSubService extends StatelessWidget {
                                   child: Image.asset(
                                     'asset/images/icon.png',
                                     fit: BoxFit.fitHeight,
-                                    width: 100,
+                                    width:
+                                        MediaQuery.of(context).size.width / 4,
                                   ),
                                 ),
                                 Padding(

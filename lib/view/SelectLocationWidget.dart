@@ -102,14 +102,14 @@ class _SelectLocationWidgetState extends State<SelectLocationWidget> {
                     children: [
                       Icon(
                         Icons.home,
-                        size: 20,
+                        size: 14,
                       ),
                       SizedBox(
                         width: 2.0,
                       ),
                       Text(
                         'Home',
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: 14),
                       ),
                     ],
                   ),
@@ -120,14 +120,14 @@ class _SelectLocationWidgetState extends State<SelectLocationWidget> {
                     children: [
                       Icon(
                         Icons.work,
-                        size: 20,
+                        size: 14,
                       ),
                       SizedBox(
                         width: 2.0,
                       ),
                       Text(
                         'Work',
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: 14),
                       ),
                     ],
                   ),
@@ -138,14 +138,14 @@ class _SelectLocationWidgetState extends State<SelectLocationWidget> {
                     children: [
                       Icon(
                         Icons.radio_button_checked,
-                        size: 20,
+                        size: 14,
                       ),
                       SizedBox(
                         width: 2.0,
                       ),
                       Text(
                         'Other',
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: 14),
                       ),
                     ],
                   ),

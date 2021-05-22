@@ -79,7 +79,7 @@ class _ShowRequestState extends State<ShowRequest> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
-                        height: height * 0.30,
+                        height: height * 0.50,
                         child: Card(
                           elevation: 2,
                           color: Colors.white,
@@ -105,6 +105,9 @@ class _ShowRequestState extends State<ShowRequest> {
                                       ),
                                     ],
                                   ),
+                                ),
+                                Expanded(
+                                  child: Text(''),
                                 ),
                                 SizedBox(
                                   height: 10,
@@ -143,34 +146,37 @@ class _ShowRequestState extends State<ShowRequest> {
 
               //request tracking indicator
               TrackingView(height: height, request: request),
-              Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+              Container(
+                width: double.infinity,
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
                       child: Container(
                         height: height * 0.30,
-                        child: Card(
-                          elevation: 2,
-                          color: Colors.white,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ElevatedButton(
-                                  style: ,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                child: TextButton(
+                                  style: ButtonStyle(
+                                      foregroundColor:
+                                          MaterialStateProperty.all(
+                                              Colors.red.shade800)),
                                   onPressed: () {},
-                                  child: const Text('Enabled'),
+                                  child: const Text('Cancel the request'),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),

@@ -12,7 +12,7 @@ class RequestTile extends StatelessWidget {
       constraints: BoxConstraints(
         maxHeight: double.infinity,
       ),
-      height: MediaQuery.of(context).size.height / 5,
+      height: MediaQuery.of(context).size.height / 4,
       child: Padding(
         padding: const EdgeInsets.all(5.0),
         child: GestureDetector(
@@ -36,7 +36,7 @@ class RequestTile extends StatelessWidget {
                       Expanded(
                         flex: 3,
                         child: Padding(
-                          padding: const EdgeInsets.all(10.0),
+                          padding: const EdgeInsets.all(5.0),
                           child: Text(
                             'Request #${request.id.toString()}',
                             style: TextStyle(
@@ -63,51 +63,57 @@ class RequestTile extends StatelessWidget {
                       Expanded(
                         flex: 1,
                         child: Padding(
-                          padding: const EdgeInsets.all(15.0),
+                          padding: const EdgeInsets.all(5.0),
                           child: Text(
                             request.subject,
                             style: TextStyle(
                                 color: Colors.teal.shade800,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                            maxLines: 1,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500),
+                            maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ),
                     ],
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Padding(
-                          padding: const EdgeInsets.all(15),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.teal.shade200,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5),
+                  Expanded(
+                    child: Text(''),
+                  ),
+                  Align(
+                    alignment: FractionalOffset.bottomCenter,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.teal.shade200,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(5),
+                                ),
                               ),
-                            ),
-                            // color: Colors.grey,
-                            width: MediaQuery.of(context).size.width / 6,
-                            child: Center(
-                              child: Text(
-                                request.status,
-                                style: TextStyle(
-                                    color: Colors.teal.shade800,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold),
+                              // color: Colors.grey,
+                              width: MediaQuery.of(context).size.width / 6,
+                              child: Center(
+                                child: Text(
+                                  request.status,
+                                  style: TextStyle(
+                                      color: Colors.teal.shade800,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      // Expanded(
-                      //   child: Text(''),
-                      // )
-                    ],
+                        // Expanded(
+                        //   child: Text(''),
+                        // )
+                      ],
+                    ),
                   ),
                 ],
               ),

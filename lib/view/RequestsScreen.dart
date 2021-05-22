@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:it_delivery/model/Request.dart';
 import 'package:it_delivery/provider/request_provider.dart';
+import 'package:it_delivery/view/Custom/Loader.dart';
 import 'package:it_delivery/view/Request/RequestTile.dart';
 import 'package:it_delivery/view/SelectService.dart';
 import 'package:provider/provider.dart';
@@ -73,11 +74,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
           builder: (_context, _snapShot) {
             if (!_snapShot.hasData || provider.isLoading) {
               return Center(
-                child: CircularProgressIndicator(
-                  backgroundColor: Colors.white,
-                  valueColor: new AlwaysStoppedAnimation<Color>(
-                      Theme.of(context).accentColor),
-                ),
+                child: LoaderWidget(),
               );
             } else {
               return RefreshIndicator(
@@ -97,11 +94,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
                       return Padding(
                         padding: EdgeInsets.symmetric(vertical: 20),
                         child: Center(
-                          child: CircularProgressIndicator(
-                            backgroundColor: Colors.white,
-                            valueColor: new AlwaysStoppedAnimation<Color>(
-                                Theme.of(context).accentColor),
-                          ),
+                          child: LoaderWidget(),
                         ),
                       );
                     } else {
@@ -115,7 +108,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
                               child: Text(
                                 provider.dataLength == 0
                                     ? '🧐 No requests found!'
-                                    : '',
+                                    : 'That\'s all requests',
                                 style: TextStyle(
                                     color: Colors.teal.shade900,
                                     fontSize: 18,
