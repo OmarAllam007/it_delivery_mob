@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:it_delivery/provider/auth_provider.dart';
 import 'package:it_delivery/view/LoginViews/Header.dart';
 import 'package:it_delivery/view/LoginViews/InputWrapper.dart';
+import 'package:provider/provider.dart';
 import '../view/LoginViews/Button.dart';
 import '../view/LoginViews/InputField.dart';
 
@@ -11,6 +13,66 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   bool isLoginForm = true;
+  final _formKeyId = GlobalKey<FormState>();
+  Map loginModel = {'mobile': '', 'password': '', 'device_name': 'android'};
+  bool _isLoading = false;
+
+  void _login() {
+    if (!_formKeyId.currentState.validate()) {
+      return;
+    }
+
+    _formKeyId.currentState.save();
+
+    setState(() {
+      _isLoading = true;
+    });
+    print('valid form');
+
+    try {
+      Provider.of<AuthProvider>(context, listen: false).login(loginModel);
+      //     .then((value) => setState(() {
+      //           _isLoading = false;
+      //         }))
+      //     .catchError((error) {
+      //   // showDialog(
+      //   //     context: context,
+      //   //     builder: (ctx) {
+      //   //       return AlertDialog(
+      //   //         content: Text('Password Updated successfully'),
+      //   //         actions: <Widget>[
+      //   //           FlatButton(
+      //   //             child: Text('Ok'),
+      //   //             onPressed: () {
+      //   //               Navigator.of(ctx).pop();
+      //   //             },
+      //   //           )
+      //   //         ],
+      //   //       );
+      //   //     });
+      // });
+    } catch (e) {
+      // await showDialog(
+      //     context: context,
+      //     builder: (ctx) {
+      //       return AlertDialog(
+      //         content: Text(e.toString()),
+      //         actions: <Widget>[
+      //           FlatButton(
+      //             child: Text('Ok'),
+      //             onPressed: () {
+      //               Navigator.of(ctx).pop();
+      //             },
+      //           )
+      //         ],
+      //       );
+      //     });
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,61 +106,71 @@ class _LoginState extends State<Login> {
               ),
               child: Padding(
                 padding: EdgeInsets.all(10),
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: InputField(isLoginForm: isLoginForm),
-                    ),
-                    SizedBox(
-                      height: 40,
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: 50,
-                      // margin: EdgeInsets.symmetric(horizontal: 5),
-                      decoration: BoxDecoration(
-                        color: Colors.teal[600],
-                        borderRadius: BorderRadius.circular(10),
+                child: Form(
+                  key: _formKeyId,
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 20,
                       ),
-                      child: Center(
-                        child: Text(
-                          this.isLoginForm ? "Login" : "Register",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold),
-                        ),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: InputField(
+                            isLoginForm: isLoginForm, loginModel: loginModel),
                       ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(this.isLoginForm
-                            ? "Not registered ? "
-                            : "Already have account ?"),
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              this.isLoginForm = !this.isLoginForm;
-                            });
-                          },
-                          child: Center(
-                            child:
-                                Text(this.isLoginForm ? 'Register' : 'Login' , style: TextStyle(color: Colors.teal[600]),),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      Container(
+                        width: double.infinity,
+                        height: 50,
+                        // margin: EdgeInsets.symmetric(horizontal: 5),
+
+                        child: Center(
+                          child: Container(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: _login,
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Colors.teal[600]),
+                                  foregroundColor:
+                                      MaterialStateProperty.all(Colors.white)),
+                              child: Text(
+                                this.isLoginForm ? "Login" : "Register",
+                              ),
+                            ),
                           ),
                         ),
-                      ],
-                    ),
-                  ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(this.isLoginForm
+                              ? "Not registered ? "
+                              : "Already have account ?"),
+                          TextButton(
+                            onPressed: () {
+                              setState(() {
+                                this.isLoginForm = !this.isLoginForm;
+                              });
+                            },
+                            child: Center(
+                              child: Text(
+                                this.isLoginForm ? 'Register' : 'Login',
+                                style: TextStyle(color: Colors.teal[600]),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

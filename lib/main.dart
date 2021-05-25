@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:it_delivery/provider/auth_provider.dart';
 import 'package:it_delivery/provider/location_provider.dart';
 import 'package:it_delivery/provider/request_provider.dart';
 import 'package:it_delivery/provider/services_provider.dart';
@@ -34,13 +35,16 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: LocationProvider(),
         ),
+        ChangeNotifierProvider.value(
+          value: AuthProvider(),
+        ),
       ],
       child: MaterialApp(
         title: 'IT Delivery',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: MainScreen(),
+        home: Login(),
         initialRoute: '/',
         routes: {
           SelectService.routeName: (context) => SelectService(),

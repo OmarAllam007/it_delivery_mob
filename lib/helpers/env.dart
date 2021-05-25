@@ -1,1 +1,1 @@
-const APP_URL = "https://a5e6b2cb4c3b.ngrok.io/api/v1/";
+const APP_URL = "http://10.0.2.2:8000/api/v1/";
