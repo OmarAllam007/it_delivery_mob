@@ -86,8 +86,12 @@ class _RequestsScreenState extends State<RequestsScreen> {
                   itemBuilder: (_ctx, index) {
                     if (index < _snapShot.data.length) {
                       var request = _snapShot.data[index] as RequestModel;
-                      return RequestTile(
-                        request: request,
+                      return Hero(
+                        transitionOnUserGestures: true,
+                        tag: 'show-request $index',
+                        child: RequestTile(
+                          request: request,
+                        ),
                       );
                     } else if (provider.hasMoreRequests &&
                         provider.dataLength > 5) {

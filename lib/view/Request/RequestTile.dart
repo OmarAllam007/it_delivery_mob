@@ -22,7 +22,7 @@ class RequestTile extends StatelessWidget {
             });
           },
           child: Card(
-            elevation: 1,
+            elevation: 2,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(
                 Radius.circular(5),
@@ -77,9 +77,6 @@ class RequestTile extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Expanded(
-                    child: Text(''),
-                  ),
                   Align(
                     alignment: FractionalOffset.bottomCenter,
                     child: Row(
@@ -118,9 +115,9 @@ class RequestTile extends StatelessWidget {
                 ],
               ),
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.teal[200]),
+                // border: Border.all(color: Colors.teal[200]),
                 borderRadius: BorderRadius.circular(5),
-                color: Colors.teal[50],
+                // color: Colors.teal[50],
               ),
             ),
           ),

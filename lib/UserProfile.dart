@@ -1,5 +1,7 @@
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flutter/material.dart';
+import 'package:it_delivery/provider/auth_provider.dart';
+import 'package:provider/provider.dart';
 
 class UserProfile extends StatefulWidget {
   const UserProfile({Key key}) : super(key: key);
@@ -11,6 +13,8 @@ class UserProfile extends StatefulWidget {
 class _UserProfileState extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
+    final userProfile = Provider.of<AuthProvider>(context);
+
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       body: SafeArea(
@@ -38,7 +42,7 @@ class _UserProfileState extends State<UserProfile> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        'UserName',
+                        userProfile.loggedUser.name,
                         style: TextStyle(
                             fontSize: 21, fontWeight: FontWeight.bold),
                       ),
@@ -60,7 +64,9 @@ class _UserProfileState extends State<UserProfile> {
                                       color: Colors.teal,
                                     ),
                                     onPressed: null),
-                                Text('omar@gmail.com'),
+                                Text(userProfile.loggedUser.email != null
+                                    ? userProfile.loggedUser.email
+                                    : ''),
                               ],
                             ),
                           ),
@@ -83,7 +89,9 @@ class _UserProfileState extends State<UserProfile> {
                                       color: Colors.teal,
                                     ),
                                     onPressed: null),
-                                Text('+966563238328'),
+                                Text(userProfile.loggedUser.mobile != null
+                                    ? userProfile.loggedUser.mobile
+                                    : ''),
                               ],
                             ),
                           ),
@@ -96,10 +104,12 @@ class _UserProfileState extends State<UserProfile> {
                         Container(
                           width: MediaQuery.of(context).size.width * 0.9,
                           child: TextButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              userProfile.logout();
+                            },
                             child: Text(
                               'Logout',
-                              style: TextStyle(color: Colors.red, fontSize: 14),
+                              style: TextStyle(color: Colors.red, fontSize: 16),
                             ),
                           ),
                         )

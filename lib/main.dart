@@ -39,21 +39,32 @@ class MyApp extends StatelessWidget {
           value: AuthProvider(),
         ),
       ],
-      child: MaterialApp(
-        title: 'IT Delivery',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: Login(),
-        initialRoute: '/',
-        routes: {
-          SelectService.routeName: (context) => SelectService(),
-          SelectSubService.routeName: (context) => SelectSubService(),
-          SelectItem.routeName: (context) => SelectItem(),
-          RequestForm.routeName: (context) => RequestForm(),
-          SelectLocation.routeName: (context) => SelectLocation(),
-          ShowRequest.routeName: (context) => ShowRequest(),
-          // '/select-date': (context) => SelectDate(),
+      child: Consumer<AuthProvider>(
+        builder: (ctx, auth, _) {
+          return MaterialApp(
+            title: 'IT Delivery',
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+            ),
+            home: auth.isAuth
+                ? MainScreen()
+                : FutureBuilder(
+                    builder: (ctx, snapShot) =>
+                        snapShot.connectionState == ConnectionState.waiting
+                            ? Center(child: Text('Loading'))
+                            : Login(),
+                  ),
+            initialRoute: '/',
+            routes: {
+              SelectService.routeName: (context) => SelectService(),
+              SelectSubService.routeName: (context) => SelectSubService(),
+              SelectItem.routeName: (context) => SelectItem(),
+              RequestForm.routeName: (context) => RequestForm(),
+              SelectLocation.routeName: (context) => SelectLocation(),
+              ShowRequest.routeName: (context) => ShowRequest(),
+              // '/select-date': (context) => SelectDate(),
+            },
+          );
         },
       ),
     );

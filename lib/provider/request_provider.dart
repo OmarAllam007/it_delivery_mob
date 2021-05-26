@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:it_delivery/helpers/env.dart';
 import 'package:it_delivery/model/Request.dart';
+import 'package:it_delivery/network_utils/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RequestProvider with ChangeNotifier {
   Stream<List<RequestModel>> stream;
@@ -41,15 +43,17 @@ class RequestProvider with ChangeNotifier {
 
   Future<List<RequestModel>> getRequests() async {
     try {
-      final url =
-          APP_URL + 'request/index?lastIndex=$lastId&filterType=$filterType';
+      final url = 'request/index?lastIndex=$lastId&filterType=$filterType';
 
       // final prefs = await SharedPreferences.getInstance();
       // _token = prefs.getString("token");
       // print(_token);
-      final response = await http.get(Uri.parse(url));
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var token = prefs.get('token');
+
+      final response = await dio(token: token).get(url);
       final List<RequestModel> finalList = [];
-      final data = json.decode(response.body) as List<dynamic>;
+      final data = response.data as List<dynamic>;
 
       data.forEach((item) {
         finalList.add(

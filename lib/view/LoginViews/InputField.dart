@@ -16,14 +16,28 @@ class InputField extends StatefulWidget {
 }
 
 class _InputFieldState extends State<InputField> {
+  TextEditingController nameTC = TextEditingController();
+  TextEditingController passwordTC = TextEditingController();
+  TextEditingController mobileTC = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    mobileTC.text = '966563238328';
+    nameTC.text = 'Omar Garana';
+    passwordTC.text = 'password1';
+  }
+
   @override
   Widget build(BuildContext context) {
     // var provider = Provider.of<RequestProvider>(context).
-
     return Column(
       children: [
         if (!this.widget.isLoginForm)
           TextFormField(
+            controller: nameTC,
             decoration: InputDecoration(
               labelText: 'Name',
               labelStyle: TextStyle(color: Colors.teal.shade900),
@@ -46,7 +60,7 @@ class _InputFieldState extends State<InputField> {
           ),
 
         TextFormField(
-          initialValue: '966563238328',
+          controller: mobileTC,
           decoration: InputDecoration(
             labelText: 'Mobile',
             labelStyle: TextStyle(color: Colors.teal.shade900),
@@ -69,8 +83,8 @@ class _InputFieldState extends State<InputField> {
         ),
         // if (!this.widget.isLoginForm)
         TextFormField(
+          controller: passwordTC,
           obscureText: true,
-          initialValue: 'password',
           decoration: InputDecoration(
             labelText: 'Password',
             labelStyle: TextStyle(color: Colors.teal.shade900),

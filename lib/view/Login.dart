@@ -16,8 +16,8 @@ class _LoginState extends State<Login> {
   final _formKeyId = GlobalKey<FormState>();
   Map loginModel = {'mobile': '', 'password': '', 'device_name': 'android'};
   bool _isLoading = false;
-
-  void _login() {
+  String errorMessage = '';
+  Future<void> _login() async {
     if (!_formKeyId.currentState.validate()) {
       return;
     }
@@ -27,47 +27,16 @@ class _LoginState extends State<Login> {
     setState(() {
       _isLoading = true;
     });
-    print('valid form');
 
     try {
-      Provider.of<AuthProvider>(context, listen: false).login(loginModel);
-      //     .then((value) => setState(() {
-      //           _isLoading = false;
-      //         }))
-      //     .catchError((error) {
-      //   // showDialog(
-      //   //     context: context,
-      //   //     builder: (ctx) {
-      //   //       return AlertDialog(
-      //   //         content: Text('Password Updated successfully'),
-      //   //         actions: <Widget>[
-      //   //           FlatButton(
-      //   //             child: Text('Ok'),
-      //   //             onPressed: () {
-      //   //               Navigator.of(ctx).pop();
-      //   //             },
-      //   //           )
-      //   //         ],
-      //   //       );
-      //   //     });
-      // });
-    } catch (e) {
-      // await showDialog(
-      //     context: context,
-      //     builder: (ctx) {
-      //       return AlertDialog(
-      //         content: Text(e.toString()),
-      //         actions: <Widget>[
-      //           FlatButton(
-      //             child: Text('Ok'),
-      //             onPressed: () {
-      //               Navigator.of(ctx).pop();
-      //             },
-      //           )
-      //         ],
-      //       );
-      //     });
-    }
+      await Provider.of<AuthProvider>(context, listen: false)
+          .login(loginModel)
+          .catchError((error) {
+        setState(() {
+          errorMessage = error.toString();
+        });
+      });
+    } catch (e) {}
 
     setState(() {
       _isLoading = false;
@@ -119,6 +88,13 @@ class _LoginState extends State<Login> {
                             borderRadius: BorderRadius.circular(10)),
                         child: InputField(
                             isLoginForm: isLoginForm, loginModel: loginModel),
+                      ),
+                      SizedBox(
+                        height: 2,
+                      ),
+                      Text(
+                        errorMessage,
+                        style: TextStyle(color: Colors.red),
                       ),
                       SizedBox(
                         height: 40,

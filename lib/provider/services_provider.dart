@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:it_delivery/helpers/env.dart';
+import 'package:it_delivery/network_utils/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/Item.dart';
 import '../model/Service.dart';
@@ -26,25 +28,25 @@ class ServicesProvider with ChangeNotifier {
   }
 
   Future<List<dynamic>> callUrl({url, params = ''}) async {
-    var urlLink = Uri.parse(APP_URL + url);
-    final response = await http.get(
-      urlLink,
+    // var urlLink = Uri.parse(APP_URL + url);
+    final response = await dio(token: '').get(
+      url,
     );
-    // headers: {"Authorization": "Bearer " + _token}
 
-    return json.decode(response.body) as List<dynamic>;
+    return json.decode(response.data) as List<dynamic>;
   }
 
   Future<void> getServices() async {
     try {
       _services = [];
 
-      await callUrl(url: 'services').then((data) {
-        data.forEach((service) {
-          _services.add(
-            Service(id: service['id'], name: service['name']),
-          );
-        });
+      await dio().get('services').then((data) {
+        print(data);
+        // data.forEach((service) {
+        //   _services.add(
+        //     Service(id: service['id'], name: service['name']),
+        //   );
+        // });
       });
     } catch (error) {
       throw error;
