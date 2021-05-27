@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class User {
   String id;
   String name;
@@ -5,15 +7,16 @@ class User {
   String mobile;
   String joinDate;
   String token;
+  List locations;
 
-  User({
-    this.id,
-    this.name,
-    this.email,
-    this.mobile,
-    this.joinDate,
-    this.token,
-  });
+  User(
+      {this.id,
+      this.name,
+      this.email,
+      this.mobile,
+      this.joinDate,
+      this.token,
+      this.locations});
 
   factory User.fromMap(Map user) {
     return User(
@@ -22,6 +25,7 @@ class User {
       email: user['email'],
       mobile: user['mobile'],
       joinDate: user['created_at'],
+      locations: user['locations'],
     );
   }
 
@@ -32,6 +36,7 @@ class User {
       "email": email,
       "mobile": mobile,
       "created_at": joinDate,
+      "locations": locations
     };
   }
 }

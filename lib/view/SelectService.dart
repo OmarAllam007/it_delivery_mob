@@ -1,5 +1,6 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:it_delivery/model/Service.dart';
 import 'package:it_delivery/provider/services_provider.dart';
 import 'package:it_delivery/view/Custom/Loader.dart';
 import 'package:it_delivery/view/SelectSubservice.dart';
@@ -13,6 +14,25 @@ class SelectService extends StatefulWidget {
 }
 
 class _SelectServiceState extends State<SelectService> {
+  Future<List<Service>> serviceList;
+
+  Future<void> getList() async {
+    final provider = Provider.of<ServicesProvider>(context, listen: false);
+    final list = provider.getServices();
+
+    setState(() {
+      serviceList = list;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      getList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,10 +44,9 @@ class _SelectServiceState extends State<SelectService> {
         backgroundColor: Colors.teal[800],
       ),
       body: FutureBuilder(
-        future:
-            Provider.of<ServicesProvider>(context, listen: false).getServices(),
-        builder: (ctx, snapShot) {
-          if (snapShot.connectionState == ConnectionState.waiting) {
+        future: serviceList,
+        builder: (ctx, AsyncSnapshot<List> snapShot) {
+          if (!snapShot.hasData) {
             return Center(
               child: LoaderWidget(),
             );
@@ -36,8 +55,7 @@ class _SelectServiceState extends State<SelectService> {
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2, mainAxisSpacing: 5),
               itemBuilder: (ctx, index) {
-                final service = snapShot.data.services[index];
-
+                final service = snapShot.data[index];
                 return Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: GestureDetector(
@@ -81,7 +99,7 @@ class _SelectServiceState extends State<SelectService> {
                   ),
                 );
               },
-              itemCount: snapShot.data.services.length,
+              itemCount: snapShot.data.length,
             );
           }
         },

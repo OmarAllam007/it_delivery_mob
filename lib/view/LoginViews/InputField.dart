@@ -27,7 +27,7 @@ class _InputFieldState extends State<InputField> {
 
     mobileTC.text = '966563238328';
     nameTC.text = 'Omar Garana';
-    passwordTC.text = 'password1';
+    passwordTC.text = 'password';
   }
 
   @override

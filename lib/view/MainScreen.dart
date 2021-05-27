@@ -25,8 +25,6 @@ class _MainScreenState extends State<MainScreen> {
         showElevation: true, // use this to remove appBar's elevation
         onItemSelected: (index) => setState(() {
           _currentIndex = index;
-          // _pageController.animateToPage(index,
-          //     duration: Duration(milliseconds: 300), curve: Curves.ease);
         }),
         items: [
           BottomNavyBarItem(
@@ -34,7 +32,6 @@ class _MainScreenState extends State<MainScreen> {
             title: Text('Requests'),
             activeColor: Colors.teal.shade600,
           ),
-
           BottomNavyBarItem(
             icon: Icon(Icons.notifications),
             title: Text('Notifications'),
@@ -45,11 +42,6 @@ class _MainScreenState extends State<MainScreen> {
             title: Text('Profile'),
             activeColor: Colors.teal.shade700,
           ),
-          // BottomNavyBarItem(
-          //   icon: Icon(Icons.settings),
-          //   title: Text('Profile'),
-          //   activeColor: Colors.teal.shade700,
-          // ),
         ],
       ),
     );

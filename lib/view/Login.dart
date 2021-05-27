@@ -37,10 +37,6 @@ class _LoginState extends State<Login> {
         });
       });
     } catch (e) {}
-
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   @override

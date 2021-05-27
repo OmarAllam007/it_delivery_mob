@@ -42,6 +42,7 @@ class AuthProvider with ChangeNotifier {
       email: userData["email"],
       mobile: userData["mobile"],
       joinDate: userData["created_at"],
+      locations: userData["locations"],
     ); //to be reviewed.
 
     _token = prefs.getString('token');

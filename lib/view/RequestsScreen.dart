@@ -4,8 +4,6 @@ import 'package:it_delivery/provider/request_provider.dart';
 import 'package:it_delivery/view/Custom/Loader.dart';
 import 'package:it_delivery/view/Request/RequestTile.dart';
 import 'package:it_delivery/view/SelectService.dart';
-import 'package:provider/provider.dart';
-import 'package:loadmore/loadmore.dart';
 
 class RequestsScreen extends StatefulWidget {
   const RequestsScreen({Key key}) : super(key: key);
@@ -16,13 +14,18 @@ class RequestsScreen extends StatefulWidget {
 
 class _RequestsScreenState extends State<RequestsScreen> {
   final scrollController = ScrollController();
-  RequestProvider provider;
+  RequestProvider provider = RequestProvider();
 
   @override
   void initState() {
     super.initState();
+  }
 
-    provider = RequestProvider();
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+
     scrollController.addListener(() {
       if (scrollController.position.maxScrollExtent ==
           scrollController.offset) {
@@ -53,7 +56,6 @@ class _RequestsScreenState extends State<RequestsScreen> {
             onTap: (index) {
               provider.filterType = index;
               provider.loadMore(clearData: true);
-              setState(() {});
             },
             indicatorColor: Colors.teal.shade100,
             tabs: [
@@ -86,12 +88,8 @@ class _RequestsScreenState extends State<RequestsScreen> {
                   itemBuilder: (_ctx, index) {
                     if (index < _snapShot.data.length) {
                       var request = _snapShot.data[index] as RequestModel;
-                      return Hero(
-                        transitionOnUserGestures: true,
-                        tag: 'show-request $index',
-                        child: RequestTile(
-                          request: request,
-                        ),
+                      return RequestTile(
+                        request: request,
                       );
                     } else if (provider.hasMoreRequests &&
                         provider.dataLength > 5) {

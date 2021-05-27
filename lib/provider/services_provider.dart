@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:it_delivery/helpers/env.dart';
@@ -15,6 +16,7 @@ class ServicesProvider with ChangeNotifier {
   List<Subservice> _subservices = [];
   List<Item> _items = [];
 
+  ServicesProvider() {}
   List<Service> get services {
     return [..._services];
   }
@@ -28,44 +30,49 @@ class ServicesProvider with ChangeNotifier {
   }
 
   Future<List<dynamic>> callUrl({url, params = ''}) async {
-    // var urlLink = Uri.parse(APP_URL + url);
-    final response = await dio(token: '').get(
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final response = await dio(token: prefs.get('token')).get(
       url,
     );
-
-    return json.decode(response.data) as List<dynamic>;
+    var data = response.data as List;
+    return data;
+    // return json.decode(response.data) as List<dynamic>;
   }
 
-  Future<void> getServices() async {
+  Future<List<Service>> getServices() async {
+    print('services');
     try {
       _services = [];
-
-      await dio().get('services').then((data) {
-        print(data);
-        // data.forEach((service) {
-        //   _services.add(
-        //     Service(id: service['id'], name: service['name']),
-        //   );
-        // });
+      await callUrl(url: 'services').then((data) {
+        data.forEach((service) {
+          _services.add(Service(
+            id: service['id'],
+            name: service['name'],
+          ));
+        });
       });
+
+      return Future.value(_services);
     } catch (error) {
       throw error;
     }
   }
 
-  Future<void> getSubservices(serviceId) async {
+  Future<List<Subservice>> getSubservices(serviceId) async {
     _subservices = [];
+
+    print(serviceId);
     try {
       await callUrl(url: 'subservices/$serviceId').then((data) {
-        data.forEach((subservice) {
-          _subservices.add(
-            Subservice(
-              id: subservice['id'],
-              name: subservice['name'],
-            ),
-          );
+        data.forEach((service) {
+          _subservices.add(Subservice(
+            id: service['id'],
+            name: service['name'],
+          ));
         });
       });
+
+      return Future.value(_subservices);
     } catch (error) {
       throw error;
     }
