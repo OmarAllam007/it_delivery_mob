@@ -129,23 +129,33 @@ class _UserProfileState extends State<UserProfile> {
                                     ),
                                   ),
                                   Expanded(
-                                    child: ListView.builder(
-                                      itemBuilder: (ctx, index) {
-                                        return Row(
-                                          children: [
-                                            IconButton(
-                                                icon: Icon(
-                                                  Icons.location_on,
-                                                  color: Colors.teal,
-                                                ),
-                                                onPressed: null),
-                                            Text(
-                                                locations[index]['title'] ?? '')
-                                          ],
-                                        );
-                                      },
-                                      itemCount: locations.length,
-                                    ),
+                                    child: locations.length != 0
+                                        ? Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 16, vertical: 14),
+                                            child: ListView.builder(
+                                              itemCount: locations.length,
+                                              itemBuilder: (ctx, index) {
+                                                return Dismissible(
+                                                  key: Key(index.toString()),
+                                                  child: Row(
+                                                    children: [
+                                                      IconButton(
+                                                          icon: Icon(
+                                                            Icons.location_on,
+                                                            color: Colors.teal,
+                                                          ),
+                                                          onPressed: null),
+                                                      Text(locations[index]
+                                                              ['title'] ??
+                                                          '')
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          )
+                                        : Text('No locations saved'),
                                   ),
                                 ],
                               ),
