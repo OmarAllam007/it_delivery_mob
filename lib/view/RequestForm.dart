@@ -101,7 +101,7 @@ class _RequestFormState extends State<RequestForm> {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context).settings.arguments as Map;
     final requestModal = args['formModel'] as RequestModel;
-
+    print(requestModal.location_id);
     final appBar = AppBar(
       title: Text('Request Details'),
       backgroundColor: Colors.teal[800],

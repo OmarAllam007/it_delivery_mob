@@ -28,61 +28,65 @@ class RequestTile extends StatelessWidget {
                 Radius.circular(5),
               ),
             ),
-            child: Container(
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: Padding(
+            child: Stack(
+              children: [
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Text(
+                              'Request #${request.id.toString()}',
+                              style: TextStyle(
+                                  color: Colors.teal.shade800,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        Padding(
                           padding: const EdgeInsets.all(5.0),
                           child: Text(
-                            'Request #${request.id.toString()}',
+                            request.created_date ?? '',
                             style: TextStyle(
                                 color: Colors.teal.shade800,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Text(
-                          request.created_date ?? '',
-                          style: TextStyle(
-                              color: Colors.teal.shade800,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Text(
-                            request.subject,
-                            style: TextStyle(
-                                color: Colors.teal.shade800,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500),
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Align(
-                    alignment: FractionalOffset.bottomCenter,
-                    child: Row(
+                      ],
+                    ),
+                    Row(
                       children: [
                         Expanded(
                           flex: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Text(
+                              request.subject,
+                              style: TextStyle(
+                                  color: Colors.teal.shade800,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500),
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    height: MediaQuery.of(context).size.height / 15,
+                    child: Row(
+                      children: [
+                        Expanded(
                           child: Padding(
                             padding: const EdgeInsets.all(10),
                             child: Container(
@@ -93,7 +97,6 @@ class RequestTile extends StatelessWidget {
                                 ),
                               ),
                               // color: Colors.grey,
-                              width: MediaQuery.of(context).size.width / 6,
                               child: Center(
                                 child: Text(
                                   request.status,
@@ -106,19 +109,11 @@ class RequestTile extends StatelessWidget {
                             ),
                           ),
                         ),
-                        // Expanded(
-                        //   child: Text(''),
-                        // )
                       ],
                     ),
                   ),
-                ],
-              ),
-              decoration: BoxDecoration(
-                // border: Border.all(color: Colors.teal[200]),
-                borderRadius: BorderRadius.circular(5),
-                // color: Colors.teal[50],
-              ),
+                ),
+              ],
             ),
           ),
         ),

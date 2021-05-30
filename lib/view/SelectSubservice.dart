@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:it_delivery/model/Service.dart';
 import 'package:it_delivery/model/Subservice.dart';
+import 'package:it_delivery/provider/auth_provider.dart';
 import 'package:it_delivery/provider/services_provider.dart';
 import 'package:it_delivery/view/Custom/Loader.dart';
 import 'package:it_delivery/view/RequestForm.dart';
 import 'package:it_delivery/view/SelectItem.dart';
 import 'package:it_delivery/view/SelectLocation.dart';
+import 'package:it_delivery/view/select_saved_location.dart';
 import 'package:provider/provider.dart';
 
 class SelectSubService extends StatefulWidget {
@@ -18,6 +20,19 @@ class SelectSubService extends StatefulWidget {
 class _SelectSubServiceState extends State<SelectSubService> {
   Future<List<Subservice>> serviceList;
   var service;
+  List locations;
+  var userProfile;
+
+  @override
+  void didChangeDependencies() {
+    final args = ModalRoute.of(context).settings.arguments as Map;
+    service = args['service'] as Service;
+
+    userProfile = Provider.of<AuthProvider>(context, listen: false);
+    locations = userProfile.loggedUser.locations;
+
+    super.didChangeDependencies();
+  }
 
   Future<void> getList() async {
     final provider = Provider.of<ServicesProvider>(context, listen: false);
@@ -34,14 +49,6 @@ class _SelectSubServiceState extends State<SelectSubService> {
     Future.delayed(Duration.zero, () {
       getList();
     });
-  }
-
-  @override
-  void didChangeDependencies() {
-    final args = ModalRoute.of(context).settings.arguments as Map;
-
-    service = args['service'] as Service;
-    super.didChangeDependencies();
   }
 
   @override
@@ -71,11 +78,16 @@ class _SelectSubServiceState extends State<SelectSubService> {
                   padding: const EdgeInsets.all(10.0),
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, SelectLocation.routeName,
-                          arguments: {
-                            'service': service,
-                            'subservice': subservice
-                          });
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SelectSavedLocation(
+                            locations: locations,
+                            service: service,
+                            subservice: subservice,
+                          ),
+                        ),
+                      );
                     },
                     child: Card(
                       shape: RoundedRectangleBorder(
