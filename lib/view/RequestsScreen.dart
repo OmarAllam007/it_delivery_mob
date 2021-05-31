@@ -1,9 +1,11 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:it_delivery/model/Request.dart';
 import 'package:it_delivery/provider/request_provider.dart';
 import 'package:it_delivery/view/Custom/Loader.dart';
 import 'package:it_delivery/view/Request/RequestTile.dart';
 import 'package:it_delivery/view/SelectService.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RequestsScreen extends StatefulWidget {
   const RequestsScreen({Key key}) : super(key: key);
@@ -15,7 +17,7 @@ class RequestsScreen extends StatefulWidget {
 class _RequestsScreenState extends State<RequestsScreen> {
   final scrollController = ScrollController();
   RequestProvider provider = RequestProvider();
-
+  var _fcmToken;
   @override
   void initState() {
     super.initState();

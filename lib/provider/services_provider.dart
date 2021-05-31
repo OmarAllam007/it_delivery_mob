@@ -31,6 +31,7 @@ class ServicesProvider with ChangeNotifier {
 
   Future<List<dynamic>> callUrl({url, params = ''}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    print(prefs.get('token'));
     final response = await dio(token: prefs.get('token')).get(
       url,
     );
@@ -40,7 +41,6 @@ class ServicesProvider with ChangeNotifier {
   }
 
   Future<List<Service>> getServices() async {
-    print('services');
     try {
       _services = [];
       await callUrl(url: 'services').then((data) {

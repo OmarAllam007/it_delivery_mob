@@ -97,11 +97,18 @@ class _RequestFormState extends State<RequestForm> {
     }
   }
 
+  var requestModal;
+
+  @override
+  void didChangeDependencies() {
+    final args = ModalRoute.of(context).settings.arguments as Map;
+    requestModal = args['formModel'] as RequestModel;
+    print(requestModal.service);
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context).settings.arguments as Map;
-    final requestModal = args['formModel'] as RequestModel;
-    print(requestModal.location_id);
     final appBar = AppBar(
       title: Text('Request Details'),
       backgroundColor: Colors.teal[800],

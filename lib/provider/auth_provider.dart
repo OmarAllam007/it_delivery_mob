@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:device_info/device_info.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:it_delivery/helpers/env.dart';
 import 'package:it_delivery/model/user.dart';
@@ -14,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthProvider with ChangeNotifier {
   User loggedUser;
   String _token;
+  String _fcmToken;
 
   bool get isAuth {
     return token != null;
@@ -73,10 +75,23 @@ class AuthProvider with ChangeNotifier {
       prefs.setString('token', _token);
       prefs.setString('user', json.encode(loggedUser.toJson()));
 
+      await sendFCMToken();
+
       notifyListeners();
     } catch (e) {
       throw Exception(error);
     }
+  }
+
+  Future sendFCMToken() async {
+    await FirebaseMessaging.instance.getToken().then((value) {
+      this._fcmToken = value;
+    });
+    print(this._fcmToken);
+    print(this._token);
+    final fcmResponse = await dio(token: _token)
+        .post('user/fcm-token', data: {'fcm-token': this._fcmToken});
+    print(fcmResponse);
   }
 
   Future<void> logout() async {

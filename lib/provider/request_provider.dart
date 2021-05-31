@@ -43,11 +43,8 @@ class RequestProvider with ChangeNotifier {
 
   Future<List<RequestModel>> getRequests() async {
     try {
-      final url = 'request/index?lastIndex=$lastId&filterType=$filterType';
+      final url = 'request?lastIndex=$lastId&filterType=$filterType';
 
-      // final prefs = await SharedPreferences.getInstance();
-      // _token = prefs.getString("token");
-      // print(_token);
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var token = prefs.get('token');
 
@@ -84,7 +81,7 @@ class RequestProvider with ChangeNotifier {
   Future<void> loadMore({bool clearData = false}) {
     if (clearData) {
       lastId = 0;
-      _data = List<RequestModel>();
+      _data = <RequestModel>[];
       hasMoreRequests = true;
     }
 
@@ -110,6 +107,9 @@ class RequestProvider with ChangeNotifier {
   }
 
   Future<void> store(RequestModel request) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.get('token');
+
     try {
       final url = APP_URL + 'request/store';
 
@@ -130,18 +130,15 @@ class RequestProvider with ChangeNotifier {
       // final prefs = await SharedPreferences.getInstance();
       // final _token = prefs.getString("token");
 
-      Response<Map> response = await Dio().post(
+      Response<Map> response = await dio(token: token).post(
         url,
         data: formData,
         options: Options(headers: {
           "Content-Type": "application/json",
-          //   // "Authorization": "Bearer " + _token
         }),
       );
       Map responseBody = response.data;
-      print(responseBody);
       return responseBody;
-      print(response.toString());
     } catch (e) {}
   }
 }

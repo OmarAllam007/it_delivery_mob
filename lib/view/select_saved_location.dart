@@ -111,6 +111,8 @@ class _SelectSavedLocationState extends State<SelectSavedLocation> {
                 onPressed: () {
                   if (selectedLocation != null) {
                     model.location_id = selectedLocation['id'].toString();
+                    model.service = widget.service.id.toString();
+                    model.subservice = widget.subservice.id.toString();
                     Navigator.popAndPushNamed(context, RequestForm.routeName,
                         arguments: {
                           'formModel': model,
