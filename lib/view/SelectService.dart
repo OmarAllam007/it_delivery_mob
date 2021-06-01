@@ -35,74 +35,111 @@ class _SelectServiceState extends State<SelectService> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Service',
-          textAlign: TextAlign.center,
-        ),
-        backgroundColor: Colors.teal[800],
-      ),
-      body: FutureBuilder(
-        future: serviceList,
-        builder: (ctx, AsyncSnapshot<List> snapShot) {
-          if (!snapShot.hasData) {
-            return Center(
-              child: LoaderWidget(),
-            );
-          } else {
-            return GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, mainAxisSpacing: 5),
-              itemBuilder: (ctx, index) {
-                final service = snapShot.data[index];
-                return Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, SelectSubService.routeName,
-                          arguments: {'service': service});
-                    },
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(20),
-                        ),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.grey.shade100,
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width / 2,
+              height: MediaQuery.of(context).size.height * 0.08,
+              child: Container(
+
+                  child: Flex(
+                    direction: Axis.horizontal,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: Icon(Icons.arrow_back),
                       ),
-                      child: Container(
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                              child: Image.asset(
-                                'asset/images/icon.png',
-                                fit: BoxFit.fitWidth,
-                                width: MediaQuery.of(context).size.width / 4,
+                      Text(
+                        'Select Service',
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      )
+                    ],
+                  )),
+            ),
+            Expanded(
+              child: FutureBuilder(
+                future: serviceList,
+                builder: (ctx, AsyncSnapshot<List> snapShot) {
+                  if (!snapShot.hasData) {
+                    return Center(
+                      child: LoaderWidget(),
+                    );
+                  } else {
+                    return GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2, mainAxisSpacing: 5),
+                      itemBuilder: (ctx, index) {
+                        final service = snapShot.data[index];
+                        return Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                  context, SelectSubService.routeName,
+                                  arguments: {'service': service});
+                            },
+                            child: Card(
+                              elevation: 2,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(20),
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Center(
-                                child: Text(
-                                  service.name,
+                              child: Container(
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 15, 0, 0),
+                                      child: Image.network(
+                                        service.imagePath,
+                                        fit: BoxFit.fitWidth,
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                4,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: Center(
+                                        child: Text(
+                                          service.name,
+                                          style: TextStyle(
+                                              color: Colors.teal.shade900,
+                                              fontSize: 18),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                decoration: BoxDecoration(
+                                  // border: Border.all(
+                                  //   color: Colors.teal[300],
+                                  // ),
+                                  borderRadius: BorderRadius.circular(15),
+                                  // color: Colors.teal.shade50,
                                 ),
                               ),
                             ),
-                          ],
-                        ),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.teal[300]),
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.teal[100]),
-                      ),
-                    ),
-                  ),
-                );
-              },
-              itemCount: snapShot.data.length,
-            );
-          }
-        },
+                          ),
+                        );
+                      },
+                      itemCount: snapShot.data.length,
+                    );
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

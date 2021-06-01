@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:it_delivery/model/Request.dart';
 import 'package:it_delivery/view/Request/Show/tracking_view.dart';
-import 'package:timelines/timelines.dart';
 
 class ShowRequest extends StatefulWidget {
   static const routeName = 'show-request';
-
-  const ShowRequest({Key key}) : super(key: key);
+  final request;
+  const ShowRequest({Key key, this.request}) : super(key: key);
 
   @override
   _ShowRequestState createState() => _ShowRequestState();
@@ -17,8 +15,9 @@ class _ShowRequestState extends State<ShowRequest> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
 
-    final args = ModalRoute.of(context).settings.arguments as Map;
-    var request = args['request'] as RequestModel;
+    var request = widget.request;
+    // final args = ModalRoute.of(context).settings.arguments as Map;
+    // var request = args['request'] as RequestModel;
 
     return Scaffold(
       appBar: AppBar(

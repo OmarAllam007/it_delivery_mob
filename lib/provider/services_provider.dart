@@ -48,6 +48,7 @@ class ServicesProvider with ChangeNotifier {
           _services.add(Service(
             id: service['id'],
             name: service['name'],
+            imagePath: service['image_path'],
           ));
         });
       });
@@ -65,9 +66,12 @@ class ServicesProvider with ChangeNotifier {
     try {
       await callUrl(url: 'subservices/$serviceId').then((data) {
         data.forEach((service) {
+          print(service);
+          print(serviceId);
           _subservices.add(Subservice(
             id: service['id'],
             name: service['name'],
+            imagePath: service['image_path']
           ));
         });
       });

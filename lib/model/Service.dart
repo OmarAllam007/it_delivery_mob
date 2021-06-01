@@ -5,6 +5,8 @@ class Service {
   final int id;
   @required
   final String name;
+  
+  final String imagePath;
 
-  Service({this.id, this.name});
+  Service({this.id, this.name, this.imagePath});
 }

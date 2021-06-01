@@ -9,6 +9,7 @@ class RequestTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.all(10),
       constraints: BoxConstraints(
         maxHeight: double.infinity,
       ),
@@ -17,9 +18,14 @@ class RequestTile extends StatelessWidget {
         padding: const EdgeInsets.all(5.0),
         child: GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, ShowRequest.routeName, arguments: {
-              'request': request,
-            });
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ShowRequest(
+                  request: request,
+                ),
+              ),
+            );
           },
           child: Card(
             elevation: 2,
@@ -30,55 +36,58 @@ class RequestTile extends StatelessWidget {
             ),
             child: Stack(
               children: [
-                Column(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 3,
-                          child: Padding(
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Text(
+                                'Request #${request.id.toString()}',
+                                style: TextStyle(
+                                    color: Colors.teal.shade800,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          Padding(
                             padding: const EdgeInsets.all(5.0),
                             child: Text(
-                              'Request #${request.id.toString()}',
+                              request.created_date ?? '',
                               style: TextStyle(
                                   color: Colors.teal.shade800,
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Text(
-                            request.created_date ?? '',
-                            style: TextStyle(
-                                color: Colors.teal.shade800,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child: Text(
-                              request.subject,
-                              style: TextStyle(
-                                  color: Colors.teal.shade800,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500),
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Text(
+                                request.subject,
+                                style: TextStyle(
+                                    color: Colors.teal.shade800,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500),
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
@@ -98,12 +107,15 @@ class RequestTile extends StatelessWidget {
                               ),
                               // color: Colors.grey,
                               child: Center(
-                                child: Text(
-                                  request.status,
-                                  style: TextStyle(
-                                      color: Colors.teal.shade800,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
+                                child: Hero(
+                                  tag: request.id,
+                                  child: Text(
+                                    request.status,
+                                    style: TextStyle(
+                                        color: Colors.teal.shade800,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
                               ),
                             ),

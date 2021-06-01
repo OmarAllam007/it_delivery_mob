@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:it_delivery/provider/auth_provider.dart';
 import 'package:it_delivery/provider/location_provider.dart';
+import 'package:it_delivery/provider/notification_provider.dart';
 import 'package:it_delivery/provider/request_provider.dart';
 import 'package:it_delivery/provider/services_provider.dart';
 import 'package:it_delivery/view/Login.dart';
@@ -60,6 +61,9 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider.value(
           value: AuthProvider(),
+        ),
+        ChangeNotifierProvider.value(
+          value: NotificationProvider(),
         ),
       ],
       child: Consumer<AuthProvider>(
