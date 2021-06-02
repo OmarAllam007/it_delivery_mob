@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:it_delivery/model/Service.dart';
 import 'package:it_delivery/model/Subservice.dart';
 import 'package:it_delivery/provider/services_provider.dart';
 import 'package:it_delivery/view/RequestForm.dart';

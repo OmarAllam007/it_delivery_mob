@@ -60,12 +60,7 @@ class _SelectSubServiceState extends State<SelectSubService> {
               width: MediaQuery.of(context).size.width / 2,
               height: MediaQuery.of(context).size.height * 0.08,
               child: Container(
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                          blurRadius: 1, offset: Offset(1, 1), spreadRadius: 1),
-                    ],
-                  ),
+                  
                   child: Flex(
                     direction: Axis.horizontal,
                     children: [
@@ -126,12 +121,17 @@ class _SelectSubServiceState extends State<SelectSubService> {
                                     Padding(
                                       padding: const EdgeInsets.fromLTRB(
                                           0, 15, 0, 0),
-                                      child: Image.network(
-                                        subservice.imagePath,
-                                        fit: BoxFit.fitWidth,
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                4,
+                                      child: FadeInImage.assetNetwork(
+                                        image: subservice.imagePath,
+                                        placeholder: '',
+                                        height: MediaQuery.of(context).size.width /4,
+                                        fadeInCurve: Curves.bounceIn,
+                                        fadeInDuration: const Duration(seconds: 1),
+                                        // subservice.imagePath,
+                                        // fit: BoxFit.fitWidth,
+                                        // width:
+                                        //     MediaQuery.of(context).size.width /
+                                        //         4,
                                       ),
                                     ),
                                     Padding(

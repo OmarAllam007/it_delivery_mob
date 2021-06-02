@@ -1,12 +1,7 @@
-import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:http/http.dart';
-import 'package:it_delivery/model/Location.dart';
 import 'package:it_delivery/model/Request.dart';
-import 'package:it_delivery/model/Service.dart';
-import 'package:it_delivery/model/Subservice.dart';
 import 'package:it_delivery/provider/request_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -19,7 +14,6 @@ class RequestForm extends StatefulWidget {
 
 class _RequestFormState extends State<RequestForm> {
   final _formKey = GlobalKey<FormState>();
-  int _currentIndex = 0;
 
   void _saveForm(RequestModel request) async {
     final isValid = _formKey.currentState.validate();

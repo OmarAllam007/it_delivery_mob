@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:it_delivery/UserProfile.dart';
 import 'package:it_delivery/view/NotificationScreen.dart';
 import 'package:it_delivery/view/RequestsScreen.dart';
-import 'package:it_delivery/view/SelectService.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key key}) : super(key: key);

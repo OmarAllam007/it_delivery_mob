@@ -12,15 +12,19 @@ class RequestsScreen extends StatefulWidget {
   _RequestsScreenState createState() => _RequestsScreenState();
 }
 
-class _RequestsScreenState extends State<RequestsScreen> {
+class _RequestsScreenState extends State<RequestsScreen>
+    {
   final scrollController = ScrollController();
   RequestProvider provider = RequestProvider();
   int selectedIndex = 0;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  // }
+
+
+  @override
+  void initState() {
+    super.initState();
+    print('again');
+  }
 
   @override
   void didChangeDependencies() {
@@ -156,8 +160,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
                         itemCount: _snapShot.data.length + 1,
                         itemBuilder: (_ctx, index) {
                           if (index < _snapShot.data.length) {
-                            var request =
-                                _snapShot.data[index] as RequestModel;
+                            var request = _snapShot.data[index] as RequestModel;
                             return RequestTile(
                               request: request,
                             );
@@ -223,7 +226,7 @@ class FilterButton extends StatelessWidget {
       child: Container(
         width: MediaQuery.of(context).size.width * .30,
         decoration: BoxDecoration(
-          color: index == selectedIndex ? Colors.teal.shade100 : Colors.white ,
+          color: index == selectedIndex ? Colors.teal.shade100 : Colors.white,
           borderRadius: BorderRadius.circular(20),
         ),
         child: TextButton(

@@ -80,6 +80,7 @@ class _SelectLocationWidgetState extends State<SelectLocationWidget> {
                 if (value.isEmpty) {
                   return 'Location name is required.';
                 }
+                return '';
               },
               onSaved: (value) {
                 this.title = value;

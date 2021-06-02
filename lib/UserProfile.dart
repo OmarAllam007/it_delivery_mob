@@ -1,6 +1,5 @@
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flutter/material.dart';
-import 'package:it_delivery/model/user.dart';
 import 'package:it_delivery/provider/auth_provider.dart';
 import 'package:provider/provider.dart';
 

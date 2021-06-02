@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -6,7 +5,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:it_delivery/model/Request.dart';
 import 'package:it_delivery/model/Service.dart';
 import 'package:it_delivery/model/Subservice.dart';
-import 'package:it_delivery/view/RequestForm.dart';
 import 'package:it_delivery/view/SelectLocationWidget.dart';
 
 Future<Position> _determinePosition() async {
