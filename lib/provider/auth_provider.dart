@@ -138,10 +138,12 @@ class AuthProvider with ChangeNotifier {
     var error = '';
     try {
       final url = 'user/register';
+
       final response = await dio().post(url, data: data);
 
       if (response.data['error'] != '' && response.data['error'] != null) {
         error = response.data['error'];
+        print(error);
         return Future.error(error, StackTrace.fromString(error));
       }
 

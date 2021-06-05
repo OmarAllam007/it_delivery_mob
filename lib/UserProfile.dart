@@ -55,35 +55,35 @@ class _UserProfileState extends State<UserProfile> {
                             fontSize: 21, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 3.0),
-                      child: Container(
-                        height: MediaQuery.of(context).size.height / 8,
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 14),
-                            child: Row(
-                              children: [
-                                IconButton(
-                                    icon: Icon(
-                                      Icons.mail_outline,
-                                      color: Colors.teal,
-                                    ),
-                                    onPressed: null),
-                                Text(userProfile.loggedUser.email != null
-                                    ? userProfile.loggedUser.email
-                                    : ''),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(
+                    //       horizontal: 8.0, vertical: 3.0),
+                    //   child: Container(
+                    //     height: MediaQuery.of(context).size.height / 8,
+                    //     child: Card(
+                    //       shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(15),
+                    //       ),
+                    //       child: Padding(
+                    //         padding: const EdgeInsets.symmetric(
+                    //             horizontal: 16, vertical: 14),
+                    //         child: Row(
+                    //           children: [
+                    //             IconButton(
+                    //                 icon: Icon(
+                    //                   Icons.mail_outline,
+                    //                   color: Colors.teal,
+                    //                 ),
+                    //                 onPressed: null),
+                    //             Text(userProfile.loggedUser.email != null
+                    //                 ? userProfile.loggedUser.email
+                    //                 : ''),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(

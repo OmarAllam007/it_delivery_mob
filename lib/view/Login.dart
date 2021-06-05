@@ -25,7 +25,7 @@ class _LoginState extends State<Login> {
   Widget buildTextWithIcon() {
     return ProgressButton.icon(iconedButtons: {
       ButtonState.idle: IconedButton(
-          text: "Login",
+          text: this.isLoginForm ? "Login" : "Register",
           icon: Icon(Icons.login, color: Colors.white),
           color: Colors.teal.shade500),
       ButtonState.loading: IconedButton(color: Colors.teal.shade700),
@@ -76,6 +76,7 @@ class _LoginState extends State<Login> {
             .catchError((error) {
           setState(() {
             errorMessage = error.toString();
+            stateTextWithIcon = ButtonState.fail;
           });
         });
       }

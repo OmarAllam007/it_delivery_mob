@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:it_delivery/provider/auth_provider.dart';
 import 'package:it_delivery/provider/location_provider.dart';
 import 'package:it_delivery/provider/notification_provider.dart';

@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:it_delivery/model/Request.dart';
-import 'package:it_delivery/provider/request_provider.dart';
-import 'package:provider/provider.dart';
 
 class InputField extends StatefulWidget {
   final isLoginForm;
@@ -25,7 +21,7 @@ class _InputFieldState extends State<InputField> {
     // TODO: implement initState
     super.initState();
 
-    mobileTC.text = '966563238328';
+    mobileTC.text = '0563238328';
     nameTC.text = 'Omar Garana';
     passwordTC.text = 'password';
   }
@@ -61,8 +57,9 @@ class _InputFieldState extends State<InputField> {
 
         TextFormField(
           controller: mobileTC,
+          keyboardType: TextInputType.phone,
           decoration: InputDecoration(
-            labelText: 'Mobile',
+            labelText: 'Mobile (05x)',
             labelStyle: TextStyle(color: Colors.teal.shade900),
             enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: Colors.teal.shade600),
@@ -75,6 +72,11 @@ class _InputFieldState extends State<InputField> {
             if (value == null || value.isEmpty) {
               return 'Mobile is required';
             }
+
+            if (value.length != 10) {
+              return 'Mobile number length is not correct';
+            }
+
             return null;
           },
           onSaved: (value) {
