@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:it_delivery/provider/auth_provider.dart';
 import 'package:it_delivery/view/LoginViews/Header.dart';
-import 'package:it_delivery/view/LoginViews/InputWrapper.dart';
 import 'package:provider/provider.dart';
-import '../view/LoginViews/Button.dart';
 import '../view/LoginViews/InputField.dart';
+import 'package:progress_state_button/iconed_button.dart';
+import 'package:progress_state_button/progress_button.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -17,6 +17,32 @@ class _LoginState extends State<Login> {
   Map loginModel = {'mobile': '', 'password': '', 'device_name': 'android'};
   bool _isLoading = false;
   String errorMessage = '';
+
+  ButtonState stateOnlyText = ButtonState.idle;
+  ButtonState stateTextWithIcon = ButtonState.idle;
+  ButtonState stateTextWithIconMinWidthState = ButtonState.idle;
+
+  Widget buildTextWithIcon() {
+    return ProgressButton.icon(iconedButtons: {
+      ButtonState.idle: IconedButton(
+          text: "Login",
+          icon: Icon(Icons.login, color: Colors.white),
+          color: Colors.teal.shade500),
+      ButtonState.loading: IconedButton(color: Colors.teal.shade700),
+      ButtonState.fail: IconedButton(
+          text: "Failed",
+          icon: Icon(Icons.cancel, color: Colors.white),
+          color: Colors.red.shade300),
+      ButtonState.success: IconedButton(
+          text: "",
+          icon: Icon(
+            Icons.check_circle,
+            color: Colors.white,
+          ),
+          color: Colors.green.shade400)
+    }, onPressed: _login, state: stateTextWithIcon);
+  }
+
   Future<void> _login() async {
     if (!_formKeyId.currentState.validate()) {
       return;
@@ -26,16 +52,33 @@ class _LoginState extends State<Login> {
 
     setState(() {
       _isLoading = true;
+      stateTextWithIcon = ButtonState.loading;
     });
 
     try {
-      await Provider.of<AuthProvider>(context, listen: false)
-          .login(loginModel)
-          .catchError((error) {
-        setState(() {
-          errorMessage = error.toString();
+      if (this.isLoginForm) {
+        await Provider.of<AuthProvider>(context, listen: false)
+            .login(loginModel)
+            .then((value) {
+          setState(() {
+            _isLoading = true;
+            stateTextWithIcon = ButtonState.success;
+          });
+        }).catchError((error) {
+          setState(() {
+            errorMessage = error.toString();
+            stateTextWithIcon = ButtonState.fail;
+          });
         });
-      });
+      } else {
+        await Provider.of<AuthProvider>(context, listen: false)
+            .register(loginModel)
+            .catchError((error) {
+          setState(() {
+            errorMessage = error.toString();
+          });
+        });
+      }
     } catch (e) {}
   }
 
@@ -93,27 +136,15 @@ class _LoginState extends State<Login> {
                         style: TextStyle(color: Colors.red),
                       ),
                       SizedBox(
-                        height: 40,
+                        height: 20,
                       ),
                       Container(
                         width: double.infinity,
-                        height: 50,
-                        // margin: EdgeInsets.symmetric(horizontal: 5),
-
+                        height: 40,
                         child: Center(
                           child: Container(
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              onPressed: _login,
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      Colors.teal[600]),
-                                  foregroundColor:
-                                      MaterialStateProperty.all(Colors.white)),
-                              child: Text(
-                                this.isLoginForm ? "Login" : "Register",
-                              ),
-                            ),
+                            width: MediaQuery.of(context).size.width / 2,
+                            child: buildTextWithIcon(),
                           ),
                         ),
                       ),

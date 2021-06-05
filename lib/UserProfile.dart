@@ -61,6 +61,9 @@ class _UserProfileState extends State<UserProfile> {
                       child: Container(
                         height: MediaQuery.of(context).size.height / 8,
                         child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 14),
@@ -86,6 +89,9 @@ class _UserProfileState extends State<UserProfile> {
                       child: Container(
                         height: MediaQuery.of(context).size.height / 8,
                         child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 14),
@@ -111,6 +117,9 @@ class _UserProfileState extends State<UserProfile> {
                       child: Container(
                         height: MediaQuery.of(context).size.height / 2,
                         child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 14),

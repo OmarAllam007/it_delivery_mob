@@ -12,7 +12,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  var _currentIndex = 0;
+  var _currentIndex = 2;
 
   @override
   Widget build(BuildContext context) {

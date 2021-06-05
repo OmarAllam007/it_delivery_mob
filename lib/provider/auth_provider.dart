@@ -87,8 +87,8 @@ class AuthProvider with ChangeNotifier {
     await FirebaseMessaging.instance.getToken().then((value) {
       this._fcmToken = value;
     });
-    print(this._fcmToken);
-    print(this._token);
+    print("code" + this._fcmToken);
+    // print(this._token);
     final fcmResponse = await dio(token: _token)
         .post('user/fcm-token', data: {'fcm-token': this._fcmToken});
     print(fcmResponse);
@@ -132,5 +132,33 @@ class AuthProvider with ChangeNotifier {
     // print(_token);
     notifyListeners();
     return true;
+  }
+
+  Future register(Map data) async {
+    var error = '';
+    try {
+      final url = 'user/register';
+      final response = await dio().post(url, data: data);
+
+      if (response.data['error'] != '' && response.data['error'] != null) {
+        error = response.data['error'];
+        return Future.error(error, StackTrace.fromString(error));
+      }
+
+      final userData = response.data['user'];
+      _token = response.data['token'];
+
+      loggedUser = User.fromMap(userData);
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      prefs.setString('token', _token);
+      prefs.setString('user', json.encode(loggedUser.toJson()));
+
+      await sendFCMToken();
+      notifyListeners();
+    } catch (e) {
+      throw Exception(error);
+    }
   }
 }
