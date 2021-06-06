@@ -40,7 +40,10 @@ dependencies:
   firebase_core: ^1.2.0
   firebase_messaging: ^10.0.0
   progress_state_button: ^1.0.3
+  flutter_localizations:
+    sdk: flutter
 
+    
 dev_dependencies:
   flutter_test:
     sdk: flutter

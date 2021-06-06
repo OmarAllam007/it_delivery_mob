@@ -1,5 +1,7 @@
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flutter/material.dart';
+import 'package:it_delivery/localization/translate.dart';
+import 'package:it_delivery/modal/change_language.dart';
 import 'package:it_delivery/provider/auth_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +15,7 @@ class UserProfile extends StatefulWidget {
 class _UserProfileState extends State<UserProfile> {
   var userProfile;
   List locations;
+  BuildContext changePasswordContext;
 
   @override
   void didChangeDependencies() {
@@ -55,35 +58,48 @@ class _UserProfileState extends State<UserProfile> {
                             fontSize: 21, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(
-                    //       horizontal: 8.0, vertical: 3.0),
-                    //   child: Container(
-                    //     height: MediaQuery.of(context).size.height / 8,
-                    //     child: Card(
-                    //       shape: RoundedRectangleBorder(
-                    //         borderRadius: BorderRadius.circular(15),
-                    //       ),
-                    //       child: Padding(
-                    //         padding: const EdgeInsets.symmetric(
-                    //             horizontal: 16, vertical: 14),
-                    //         child: Row(
-                    //           children: [
-                    //             IconButton(
-                    //                 icon: Icon(
-                    //                   Icons.mail_outline,
-                    //                   color: Colors.teal,
-                    //                 ),
-                    //                 onPressed: null),
-                    //             Text(userProfile.loggedUser.email != null
-                    //                 ? userProfile.loggedUser.email
-                    //                 : ''),
-                    //           ],
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0, vertical: 3.0),
+                      child: Container(
+                        height: MediaQuery.of(context).size.height / 8,
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 14),
+                            child: Row(
+                              children: [
+                                TextButton(
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.language,
+                                        color: Colors.teal,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          T(context, 'Change Langauage'),
+                                          style: TextStyle(
+                                            color: Colors.teal.shade600,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  onPressed: () {
+                                    showChangeLanguageModal(context);
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
@@ -130,7 +146,7 @@ class _UserProfileState extends State<UserProfile> {
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
-                                      'Locations',
+                                      T(context, 'Locations'),
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold),
@@ -156,7 +172,9 @@ class _UserProfileState extends State<UserProfile> {
                                               );
                                             },
                                           )
-                                        : Text('No locations saved'),
+                                        : Text(
+                                            T(context, 'No locations saved'),
+                                          ),
                                   ),
                                 ],
                               ),
@@ -175,7 +193,7 @@ class _UserProfileState extends State<UserProfile> {
                               userProfile.logout();
                             },
                             child: Text(
-                              'Logout',
+                              T(context, 'Logout'),
                               style: TextStyle(color: Colors.red, fontSize: 16),
                             ),
                           ),
@@ -189,6 +207,24 @@ class _UserProfileState extends State<UserProfile> {
           ),
         ),
       ),
+    );
+  }
+
+  showChangeLanguageModal(BuildContext ctx) {
+    // set up the buttons
+    // setState(() {
+    changePasswordContext = ctx;
+    // });
+
+    // set up the AlertDialog
+    final alert = ChangeLanguageModal(changePasswordContext);
+
+    // show the dialog
+    showDialog(
+      context: ctx,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }

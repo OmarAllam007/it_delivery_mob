@@ -17,12 +17,9 @@ import './view/SelectItem.dart';
 import './view/SelectService.dart';
 import './view/SelectSubservice.dart';
 
-// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-//   // If you're going to use other Firebase services in the background, such as Firestore,
-//   // make sure you call `initializeApp` before using other Firebase services.
-//   await Firebase.initializeApp();
-//   print('Handling a background message ${message.messageId}');
-// }
+import 'package:flutter_localizations/flutter_localizations.dart';
+import './localization/localizations.dart';
+import './localization/translate.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,12 +31,35 @@ Future<void> main() async {
 }
 
 class MyApp extends StatefulWidget {
+  static void setLocale(BuildContext context, Locale locale) {
+    _MyAppState state = context.findAncestorStateOfType<_MyAppState>();
+    state.setLocale(locale);
+  }
+
   // This widget is the root of your application.
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
+  Locale locale;
+  setLocale(Locale newLocale) {
+    setState(() {
+      locale = newLocale;
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    getLocal().then((newLocale) => {
+          setState(() {
+            this.locale = newLocale;
+            // font = locale.countryCode == 'ar' ? 'ArabicTwo' : 'Arial';
+          })
+        });
+    super.didChangeDependencies();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -68,6 +88,30 @@ class _MyAppState extends State<MyApp> {
       child: Consumer<AuthProvider>(
         builder: (ctx, auth, _) {
           return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            supportedLocales: [
+              const Locale('en', 'US'),
+              const Locale('ar', 'SA'),
+              // const Locale('hi', 'IN'),
+              // const Locale('ur', 'PK'),
+              // const Locale('nep'),
+            ],
+            locale: locale,
+            localizationsDelegates: [
+              MasterLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            localeResolutionCallback: (deviceLocal, supportedLocals) {
+              for (var locale in supportedLocals) {
+                if (locale.languageCode == deviceLocal.languageCode &&
+                    locale.countryCode == deviceLocal.countryCode) {
+                  return deviceLocal;
+                }
+              }
+              return supportedLocals.first;
+            },
             title: 'IT Delivery',
             theme: ThemeData(
               primarySwatch: Colors.blue,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:it_delivery/localization/translate.dart';
 import 'package:it_delivery/model/Request.dart';
 import 'package:it_delivery/provider/request_provider.dart';
 import 'package:it_delivery/view/Custom/Loader.dart';
@@ -12,18 +13,14 @@ class RequestsScreen extends StatefulWidget {
   _RequestsScreenState createState() => _RequestsScreenState();
 }
 
-class _RequestsScreenState extends State<RequestsScreen>
-    {
+class _RequestsScreenState extends State<RequestsScreen> {
   final scrollController = ScrollController();
   RequestProvider provider = RequestProvider();
   int selectedIndex = 0;
 
-
-
   @override
   void initState() {
     super.initState();
-    print('again');
   }
 
   @override
@@ -43,8 +40,8 @@ class _RequestsScreenState extends State<RequestsScreen>
     return SafeArea(
       child: Scaffold(
         floatingActionButton: FloatingActionButton.extended(
-          label: const Text(
-            'New Request',
+          label: Text(
+            T(context, 'New Request'),
           ),
           icon: const Icon(Icons.add),
           backgroundColor: Colors.teal[800],
@@ -79,7 +76,7 @@ class _RequestsScreenState extends State<RequestsScreen>
                       Padding(
                         padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                         child: Text(
-                          'Requests',
+                          T(context, 'Requests'),
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 24,
@@ -99,7 +96,7 @@ class _RequestsScreenState extends State<RequestsScreen>
                         scrollDirection: Axis.horizontal,
                         children: <Widget>[
                           FilterButton(
-                            text: 'All',
+                            text: T(context,'All'),
                             index: 0,
                             selectedIndex: selectedIndex,
                             changeFilter: () {
@@ -111,7 +108,7 @@ class _RequestsScreenState extends State<RequestsScreen>
                             },
                           ),
                           FilterButton(
-                            text: 'Completed',
+                            text: T(context,'Completed'),
                             index: 1,
                             selectedIndex: selectedIndex,
                             changeFilter: () {
@@ -123,7 +120,7 @@ class _RequestsScreenState extends State<RequestsScreen>
                             },
                           ),
                           FilterButton(
-                            text: 'Cancelled',
+                            text: T(context,'Cancelled'),
                             index: 2,
                             selectedIndex: selectedIndex,
                             changeFilter: () {
@@ -183,7 +180,7 @@ class _RequestsScreenState extends State<RequestsScreen>
                                   child: Center(
                                     child: Text(
                                       provider.dataLength == 0
-                                          ? '🧐 No requests found!'
+                                          ? '🧐 ' + T(context,'No requests found!')
                                           : '',
                                       style: TextStyle(
                                           color: Colors.teal.shade900,

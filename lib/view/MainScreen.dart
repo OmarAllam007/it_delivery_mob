@@ -1,6 +1,7 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:it_delivery/UserProfile.dart';
+import 'package:it_delivery/localization/translate.dart';
 import 'package:it_delivery/view/NotificationScreen.dart';
 import 'package:it_delivery/view/RequestsScreen.dart';
 
@@ -28,17 +29,17 @@ class _MainScreenState extends State<MainScreen> {
         items: [
           BottomNavyBarItem(
             icon: Icon(Icons.apps),
-            title: Text('Requests'),
+            title: Text(T(context, 'Requests')),
             activeColor: Colors.teal.shade600,
           ),
           BottomNavyBarItem(
             icon: Icon(Icons.notifications),
-            title: Text('Notifications'),
+            title: Text(T(context, 'Notifications')),
             activeColor: Colors.teal.shade600,
           ),
           BottomNavyBarItem(
             icon: Icon(Icons.person),
-            title: Text('Profile'),
+            title: Text(T(context, 'Profile')),
             activeColor: Colors.teal.shade700,
           ),
         ],
