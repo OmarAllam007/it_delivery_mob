@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:it_delivery/network_utils/dio.dart';
+import 'package:it_delivery/view/RequestForm.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../helpers/env.dart';
@@ -112,23 +113,22 @@ class RequestProvider with ChangeNotifier {
   //   });
   // }
 
-  Future<void> store(RequestModel request) async {
+  Future<void> store(RequestFormModel request) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.get('token');
 
     try {
-      final url = APP_URL + 'request/store';
-
       var data = {
-        'subject': request.subject,
-        'service_id': request.service,
-        'subservice_id': request.subservice,
+        'service_id': request.serviceId,
+        'subservice_id': request.subserviceId,
         'description': request.description,
-        'location_id': request.location_id,
+        // 'location_id': request.location_id,
         'mobile': request.mobile
       };
 
-      httpPostMultipart(url: url, token: token, data: data);
+    
+    
+      httpPostMultipart(url: 'request/store', token: token, data: data);
 
       // Response<Map> response = await dio(token: token).post(
       //   url,

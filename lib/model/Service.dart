@@ -7,6 +7,7 @@ class Service {
   final String name;
   
   final String imagePath;
+  final List subServices;
 
-  Service({this.id, this.name, this.imagePath});
+  Service({this.id, this.name, this.imagePath , this.subServices});
 }

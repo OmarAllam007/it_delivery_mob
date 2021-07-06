@@ -114,6 +114,7 @@ class _MyAppState extends State<MyApp> {
               primarySwatch: Colors.blue,
               backgroundColor: Color.fromRGBO(0, 129, 129, 1),
               buttonColor: Color.fromRGBO(0, 129, 129, 1),
+              primaryColor: Color.fromRGBO(0, 129, 129, 1)
             ),
             home: auth.isAuth
                 ? MainScreen()

@@ -195,55 +195,17 @@ class _RequestsScreenState extends State<RequestsScreen> {
               Expanded(
                 child: CustomScrollView(
                   slivers: [
-                    // SliverAppBar(
-                    //   backgroundColor: Colors.grey.shade200,
-                    //   elevation: 0.0,
-                    //   collapsedHeight: MediaQuery.of(context).size.height / 10,
-                    //   pinned: true,
-                    //   leading: Icon(null),
-                    //   flexibleSpace: ListView(
-                    //     children: <Widget>[
-                    //       Padding(
-                    //         padding:
-                    //             const EdgeInsets.only(left: 15.0, right: 15.0),
-                    //         child: Row(
-                    //           children: <Widget>[
-                    //             Expanded(
-                    //               child: Container(
-                    //                 margin: EdgeInsets.only(right: 8.0),
-                    //                 alignment: Alignment.center,
-                    //                 height:
-                    //                     MediaQuery.of(context).size.height / 16,
-                    //                 padding: EdgeInsets.only(left: 15.0),
-                    //                 decoration: BoxDecoration(
-                    //                     color: Colors.white,
-                    //                     borderRadius:
-                    //                         BorderRadius.circular(40.0)),
-                    //                 child: TextField(
-                    //                   onSubmitted: (value) {
-                    //                     current_page = 1;
-                    //                     // _searchTerm = value;
-                    //                     _pagingController.refresh();
-                    //                   },
-                    //                   style: TextStyle(fontSize: 15.0),
-                    //                   decoration: InputDecoration(
-                    //                     hintText: "Search by ",
-                    //                     border: InputBorder.none,
-                    //                   ),
-                    //                 ),
-                    //               ),
-                    //               flex: 1,
-                    //             ),
-                    //           ],
-                    //         ),
-                    //       )
-                    //     ],
-                    //   ),
-                    // ),
                     SliverPadding(padding: const EdgeInsets.all(8.0)),
                     PagedSliverList<int, RequestModel>(
                       pagingController: _pagingController,
                       builderDelegate: PagedChildBuilderDelegate<RequestModel>(
+                        noItemsFoundIndicatorBuilder: (ctx) {
+                          return Center(
+                            child: Text(
+                              T(context, 'No requests found'),
+                            ),
+                          );
+                        },
                         itemBuilder: (context, request, index) => Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: RequestTile(

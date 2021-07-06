@@ -41,6 +41,7 @@ class ServicesProvider with ChangeNotifier {
             id: service['id'],
             name: service['name'],
             imagePath: service['image_path'],
+            subServices: service['subservices']
           ));
         });
       });

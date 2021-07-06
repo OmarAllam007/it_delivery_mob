@@ -17,20 +17,21 @@ class NotificationProvider with ChangeNotifier {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var token = prefs.get('token');
-      var response = await httpGet(token: token, url: '/user/notifications');
+      
+      var response = await httpGet(token: token, url: 'user/notifications');
       print(response.body);
-      // final data = convert.jsonDecode(response.body);
+      final data = convert.jsonDecode(response.body);
 
-      // data.forEach((notification) {
-      //   _notifications.add(NotificationModel(
-      //       id: notification['id'],
-      //       title: notification['title'],
-      //       text: notification['text'],
-      //       created_at: notification['created_at'],
-      //       request_id: notification['request_id'].toString()));
-      // });
+      data.forEach((notification) {
+        _notifications.add(NotificationModel(
+            id: notification['id'],
+            title: notification['title'],
+            text: notification['text'],
+            created_at: notification['created_at'],
+            request_id: notification['request_id'].toString()));
+      });
 
-      // return _notifications;
+      return _notifications;
     } catch (error) {
       throw error;
     }
