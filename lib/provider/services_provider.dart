@@ -1,17 +1,15 @@
-
 import 'package:flutter/material.dart';
-import 'package:it_delivery/network_utils/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'dart:convert' as convert;
 import '../model/Item.dart';
 import '../model/Service.dart';
 import '../model/Subservice.dart';
+import '../network_utils/dio.dart';
 
 class ServicesProvider with ChangeNotifier {
   List<Service> _services = [];
   List<Subservice> _subservices = [];
   List<Item> _items = [];
-
 
   List<Service> get services {
     return [..._services];
@@ -27,13 +25,11 @@ class ServicesProvider with ChangeNotifier {
 
   Future<List<dynamic>> callUrl({url, params = ''}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(prefs.get('token'));
-    final response = await dio(token: prefs.get('token')).get(
-      url,
-    );
-    var data = response.data as List;
+
+    final response = await httpGet(token: prefs.get('token'), url: url);
+    var data = convert.jsonDecode(response.body) as List;
+    // var data = response.body as List;
     return data;
-    // return json.decode(response.data) as List<dynamic>;
   }
 
   Future<List<Service>> getServices() async {
@@ -65,10 +61,9 @@ class ServicesProvider with ChangeNotifier {
           print(service);
           print(serviceId);
           _subservices.add(Subservice(
-            id: service['id'],
-            name: service['name'],
-            imagePath: service['image_path']
-          ));
+              id: service['id'],
+              name: service['name'],
+              imagePath: service['image_path']));
         });
       });
 

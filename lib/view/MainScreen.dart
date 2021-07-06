@@ -12,12 +12,12 @@ class MainScreen extends StatefulWidget {
   _MainScreenState createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
-  var _currentIndex = 2;
+List screens = [RequestsScreen(), NotificationScreen(), UserProfile()];
 
+class _MainScreenState extends State<MainScreen> {
+  var _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
-    List screens = [RequestsScreen(), NotificationScreen(), UserProfile()];
     return Scaffold(
       body: screens[_currentIndex],
       bottomNavigationBar: BottomNavyBar(

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:it_delivery/provider/auth_provider.dart';
-import 'package:it_delivery/provider/location_provider.dart';
-import 'package:it_delivery/provider/notification_provider.dart';
-import 'package:it_delivery/provider/request_provider.dart';
-import 'package:it_delivery/provider/services_provider.dart';
-import 'package:it_delivery/view/Login.dart';
-import 'package:it_delivery/view/MainScreen.dart';
-import 'package:it_delivery/view/SelectLocation.dart';
-import 'package:it_delivery/view/ShowRequest.dart';
-import 'package:it_delivery/view/select_saved_location.dart';
+import './provider/auth_provider.dart';
+import './provider/location_provider.dart';
+import './provider/notification_provider.dart';
+import './provider/request_provider.dart';
+import './provider/services_provider.dart';
+import './view/Login.dart';
+import './view/MainScreen.dart';
+import './view/SelectLocation.dart';
+import './view/ShowRequest.dart';
+import './view/select_saved_location.dart';
 import 'package:provider/provider.dart';
 import './view/RequestForm.dart';
 import './view/SelectItem.dart';
@@ -92,9 +92,6 @@ class _MyAppState extends State<MyApp> {
             supportedLocales: [
               const Locale('en', 'US'),
               const Locale('ar', 'SA'),
-              // const Locale('hi', 'IN'),
-              // const Locale('ur', 'PK'),
-              // const Locale('nep'),
             ],
             locale: locale,
             localizationsDelegates: [
@@ -115,6 +112,8 @@ class _MyAppState extends State<MyApp> {
             title: 'IT Delivery',
             theme: ThemeData(
               primarySwatch: Colors.blue,
+              backgroundColor: Color.fromRGBO(0, 129, 129, 1),
+              buttonColor: Color.fromRGBO(0, 129, 129, 1),
             ),
             home: auth.isAuth
                 ? MainScreen()
@@ -133,7 +132,6 @@ class _MyAppState extends State<MyApp> {
               SelectLocation.routeName: (context) => SelectLocation(),
               ShowRequest.routeName: (context) => ShowRequest(),
               SelectSavedLocation.routeName: (context) => SelectSavedLocation(),
-              // '/select-date': (context) => SelectDate(),
             },
           );
         },

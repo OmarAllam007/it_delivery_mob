@@ -6,6 +6,7 @@ import 'package:it_delivery/network_utils/dio.dart';
 // import 'package:hubdesk_app/provider/auth.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert' as convert;
 
 class MasterLocalizations {
   final Locale locale;
@@ -25,13 +26,16 @@ class MasterLocalizations {
     // SharedPreferences prefs = await SharedPreferences.getInstance();
     // final token = prefs.getString('token');
 
-  
     // if (true) {
-    final response = await dio().get('translation/${locale.languageCode}');
+    final response = await httpGet(url: 'translation/${locale.languageCode}');
 
     if (response.statusCode == 200) {
-      final words = response.data as List;
-      _localizedValues =  Map.fromIterable(words,key: (e) => e['word'], value: (e) => e['translation']);
+      var jsonResponse = convert.jsonDecode(response.body) as List<dynamic>;
+
+      final words = jsonResponse;
+
+      // _localizedValues = Map.fromIterable(words,
+      //     key: (e) => e['word'], value: (e) => e['translation']);
     } else {
       _localizedValues = {};
     }

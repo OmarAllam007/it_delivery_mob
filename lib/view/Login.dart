@@ -15,7 +15,6 @@ class _LoginState extends State<Login> {
   bool isLoginForm = true;
   final _formKeyId = GlobalKey<FormState>();
   Map loginModel = {'mobile': '', 'password': '', 'device_name': 'android'};
-  bool _isLoading = false;
   String errorMessage = '';
 
   ButtonState stateOnlyText = ButtonState.idle;
@@ -27,8 +26,8 @@ class _LoginState extends State<Login> {
       ButtonState.idle: IconedButton(
           text: this.isLoginForm ? "Login" : "Register",
           icon: Icon(Icons.login, color: Colors.white),
-          color: Colors.teal.shade500),
-      ButtonState.loading: IconedButton(color: Colors.teal.shade700),
+          color: Theme.of(context).buttonColor),
+      ButtonState.loading: IconedButton(color: Theme.of(context).buttonColor),
       ButtonState.fail: IconedButton(
           text: "Failed",
           icon: Icon(Icons.cancel, color: Colors.white),
@@ -51,7 +50,7 @@ class _LoginState extends State<Login> {
     _formKeyId.currentState.save();
 
     setState(() {
-      _isLoading = true;
+      // _isLoading = true;
       stateTextWithIcon = ButtonState.loading;
     });
 
@@ -61,7 +60,7 @@ class _LoginState extends State<Login> {
             .login(loginModel)
             .then((value) {
           setState(() {
-            _isLoading = true;
+            // _isLoading = true;
             stateTextWithIcon = ButtonState.success;
           });
         }).catchError((error) {
@@ -69,6 +68,11 @@ class _LoginState extends State<Login> {
             errorMessage = error.toString();
             stateTextWithIcon = ButtonState.fail;
           });
+          Future.delayed(Duration(seconds: 1)).then((value) => {
+                setState(() {
+                  stateTextWithIcon = ButtonState.idle;
+                })
+              });
         });
       } else {
         await Provider.of<AuthProvider>(context, listen: false)
@@ -78,6 +82,11 @@ class _LoginState extends State<Login> {
             errorMessage = error.toString();
             stateTextWithIcon = ButtonState.fail;
           });
+          Future.delayed(Duration(seconds: 1)).then((value) => {
+                setState(() {
+                  stateTextWithIcon = ButtonState.idle;
+                })
+              });
         });
       }
     } catch (e) {}
@@ -94,8 +103,8 @@ class _LoginState extends State<Login> {
           begin: Alignment.bottomRight,
           end: Alignment.topRight,
           colors: [
-            Colors.teal.shade500,
-            Colors.teal.shade900,
+            Theme.of(context).backgroundColor,
+            Theme.of(context).backgroundColor,
           ],
         )),
         child: ListView(
@@ -167,7 +176,9 @@ class _LoginState extends State<Login> {
                             child: Center(
                               child: Text(
                                 this.isLoginForm ? 'Register' : 'Login',
-                                style: TextStyle(color: Colors.teal[600]),
+                                style: TextStyle(
+                                  color: Theme.of(context).buttonColor,
+                                ),
                               ),
                             ),
                           ),

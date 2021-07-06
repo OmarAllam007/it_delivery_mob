@@ -26,11 +26,10 @@ class _ChangeLanguageModalState extends State<ChangeLanguageModal> {
       },
     );
     Widget submitButton = RaisedButton(
-
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       color: Colors.teal.shade600,
       child: isLoading
-          ? CircularProgressIndicator(color: Colors.teal)
+          ? CircularProgressIndicator(backgroundColor: Colors.teal)
           : Text(
               T(context, "Change"),
               style: TextStyle(

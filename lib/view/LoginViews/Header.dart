@@ -10,9 +10,9 @@ class Header extends StatelessWidget {
         children: <Widget>[
           Center(
             child: Image.asset(
-              'asset/images/icon.png',
+              'asset/images/logo.jpeg',
               fit: BoxFit.contain,
-              width: 100,
+              width: 300,
             ),
           ),
           SizedBox(

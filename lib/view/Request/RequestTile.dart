@@ -110,11 +110,12 @@ class RequestTile extends StatelessWidget {
                                 child: Hero(
                                   tag: request.id,
                                   child: Text(
-                                    request.status,
+                                    request.status ?? 'not exist',
                                     style: TextStyle(
-                                        color: Colors.teal.shade800,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
+                                      color: Colors.teal.shade800,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ),

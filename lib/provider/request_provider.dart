@@ -1,16 +1,20 @@
-import 'dart:async';
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:it_delivery/helpers/env.dart';
-import 'package:it_delivery/model/Request.dart';
+import 'package:http/http.dart';
 import 'package:it_delivery/network_utils/dio.dart';
+import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../helpers/env.dart';
+import '../model/Request.dart';
+import 'dart:convert' as convert;
 
 class RequestProvider with ChangeNotifier {
-  Stream<List<RequestModel>> stream;
+  // Stream<List<RequestModel>> stream;
+  List<RequestModel> _requests = [];
+
+  List<RequestModel> get requests {
+    return [...this._requests];
+  }
+
   bool hasMoreRequests;
   bool isLoading;
 
@@ -26,34 +30,35 @@ class RequestProvider with ChangeNotifier {
     return _data.length > 1;
   }
 
-  RequestProvider() {
-    _data = [];
-    _controller = StreamController<List<RequestModel>>.broadcast();
-    isLoading = false;
+  // RequestProvider() {
+  //   _data = [];
+  //   _controller = StreamController<List<RequestModel>>.broadcast();
+  //   isLoading = false;
 
-    stream = _controller.stream;
-    hasMoreRequests = true;
+  //   // stream = _controller.stream;
+  //   hasMoreRequests = true;
 
-    refresh();
-  }
+  //   refresh();
+  // }
 
   Future<void> refresh() {
-    return loadMore(clearData: true);
+    // return loadMore(clearData: true);
   }
 
-  Future<List<RequestModel>> getRequests() async {
+  Future<void> getRequests({currentPage}) async {
     try {
-      final url = 'request?lastIndex=$lastId&filterType=$filterType';
+      print(this.filterType);
+      _requests = [];
+      final url = 'request?page=$currentPage&filterType=${this.filterType}';
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var token = prefs.get('token');
 
-      final response = await dio(token: token).get(url);
-      final List<RequestModel> finalList = [];
-      final data = response.data as List<dynamic>;
+      var response = await httpGet(token: token, url: url);
+      var jsonResponse = convert.jsonDecode(response.body);
 
-      data.forEach((item) {
-        finalList.add(
+      jsonResponse.forEach((item) {
+        _requests.add(
           RequestModel(
             id: item['id'],
             subject: item['subject'],
@@ -70,7 +75,8 @@ class RequestProvider with ChangeNotifier {
         );
       });
 
-      return finalList;
+      // final List<RequestModel> finalList = [];
+
     } catch (error) {
       throw error;
     }
@@ -78,33 +84,33 @@ class RequestProvider with ChangeNotifier {
     return Future.value();
   }
 
-  Future<void> loadMore({bool clearData = false}) {
-    if (clearData) {
-      lastId = 0;
-      _data = <RequestModel>[];
-      hasMoreRequests = true;
-    }
+  // Future<void> loadMore({bool clearData = false}) {
+  //   if (clearData) {
+  //     lastId = 0;
+  //     _data = <RequestModel>[];
+  //     hasMoreRequests = true;
+  //   }
 
-    if (isLoading || !hasMoreRequests) {
-      return Future.value();
-    }
+  //   if (isLoading || !hasMoreRequests) {
+  //     return Future.value();
+  //   }
 
-    isLoading = true;
-    return getRequests().then((data) {
-      isLoading = false;
-      _data.addAll(data);
+  //   isLoading = true;
+  //   return getRequests().then((data) {
+  //     isLoading = false;
+  //     _data.addAll(data);
 
-      hasMoreRequests = data.length != 0;
-      dataLength = _data.length;
-      _controller.add(_data);
-      lastId = _data.last.id;
-      isLoading = false;
+  //     hasMoreRequests = data.length != 0;
+  //     dataLength = _data.length;
+  //     _controller.add(_data);
+  //     lastId = _data.last.id;
+  //     isLoading = false;
 
-      notifyListeners();
-    }).catchError((error) {
-      isLoading = false;
-    });
-  }
+  //     notifyListeners();
+  //   }).catchError((error) {
+  //     isLoading = false;
+  //   });
+  // }
 
   Future<void> store(RequestModel request) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -113,32 +119,26 @@ class RequestProvider with ChangeNotifier {
     try {
       final url = APP_URL + 'request/store';
 
-      FormData formData = FormData.fromMap({
+      var data = {
         'subject': request.subject,
         'service_id': request.service,
         'subservice_id': request.subservice,
         'description': request.description,
         'location_id': request.location_id,
         'mobile': request.mobile
-      });
+      };
 
-      // for (int i = 0; i < request.files.length; i++) {
-      //   formData.files.add(MapEntry(
-      //       'attachments[]', await MultipartFile.fromFile(request.files[i])));
-      // }
+      httpPostMultipart(url: url, token: token, data: data);
 
-      // final prefs = await SharedPreferences.getInstance();
-      // final _token = prefs.getString("token");
-
-      Response<Map> response = await dio(token: token).post(
-        url,
-        data: formData,
-        options: Options(headers: {
-          "Content-Type": "application/json",
-        }),
-      );
-      Map responseBody = response.data;
-      return responseBody;
+      // Response<Map> response = await dio(token: token).post(
+      //   url,
+      //   data: formData,
+      //   options: Options(headers: {
+      //     "Content-Type": "application/json",
+      //   }),
+      // );
+      // Map responseBody = response.data;
+      // return responseBody;
     } catch (e) {}
   }
 }

@@ -1,15 +1,10 @@
-import 'dart:io';
-
-import 'package:device_info/device_info.dart';
-import 'package:dio/dio.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
-import 'package:it_delivery/helpers/env.dart';
-import 'package:it_delivery/model/user.dart';
-import 'package:it_delivery/network_utils/dio.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:it_delivery/model/user.dart';
+import 'package:it_delivery/network_utils/dio.dart';
+import 'dart:convert' as convert;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider with ChangeNotifier {
@@ -32,6 +27,7 @@ class AuthProvider with ChangeNotifier {
   Future getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _token = prefs.get('token');
+    // print(_token);
     if (_token == null) {
       return;
     }
@@ -57,16 +53,17 @@ class AuthProvider with ChangeNotifier {
     var error = '';
     try {
       final url = 'user/login';
-      final response = await dio(token: _token).post(url, data: data);
+      final response = await httpPost(token: _token, url: url, data: data);
+      var jsonResponse = convert.jsonDecode(response.body) as Map;
 
-      if (response.data['error'] != '' && response.data['error'] != null) {
-        error = response.data['error'];
+      if (jsonResponse['error'] != '' && jsonResponse['error'] != null) {
+        error = jsonResponse['error'];
         return Future.error(error, StackTrace.fromString(error));
 
         // throw Exception(error);
       }
-      final userData = response.data['user'];
-      _token = response.data['token'];
+      final userData = jsonResponse['user'];
+      _token = jsonResponse['token'];
 
       loggedUser = User.fromMap(userData);
 
@@ -89,8 +86,11 @@ class AuthProvider with ChangeNotifier {
     });
     print("code" + this._fcmToken);
     // print(this._token);
-    final fcmResponse = await dio(token: _token)
-        .post('user/fcm-token', data: {'fcm-token': this._fcmToken});
+    final fcmResponse = await httpPost(
+        token: _token,
+        url: 'user/fcm-token',
+        data: {'fcm-token': this._fcmToken});
+
     print(fcmResponse);
   }
 
@@ -98,10 +98,12 @@ class AuthProvider with ChangeNotifier {
     final url = 'user/logout';
 
     try {
-      await dio(token: _token).post(
-        url,
+      await httpPost(
+        token: _token,
+        url: url,
         data: {},
       );
+
       final prefs = await SharedPreferences.getInstance();
       prefs.clear();
 
@@ -139,16 +141,17 @@ class AuthProvider with ChangeNotifier {
     try {
       final url = 'user/register';
 
-      final response = await dio().post(url, data: data);
-
-      if (response.data['error'] != '' && response.data['error'] != null) {
-        error = response.data['error'];
+      final response = await httpPost(url: url, data: data);
+      var jsonResponse = convert.jsonDecode(response.body) as Map;
+      print(jsonResponse);
+      if (jsonResponse['error'] != '' && jsonResponse['error'] != null) {
+        error = jsonResponse['error'];
         print(error);
         return Future.error(error, StackTrace.fromString(error));
       }
 
-      final userData = response.data['user'];
-      _token = response.data['token'];
+      final userData = jsonResponse['user'];
+      _token = jsonResponse['token'];
 
       loggedUser = User.fromMap(userData);
 
@@ -160,7 +163,7 @@ class AuthProvider with ChangeNotifier {
       await sendFCMToken();
       notifyListeners();
     } catch (e) {
-      throw Exception(error);
+      print(e.toString());
     }
   }
 }

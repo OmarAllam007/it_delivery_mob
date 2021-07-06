@@ -60,24 +60,23 @@ class _SelectSubServiceState extends State<SelectSubService> {
               width: MediaQuery.of(context).size.width / 2,
               height: MediaQuery.of(context).size.height * 0.08,
               child: Container(
-                  
                   child: Flex(
-                    direction: Axis.horizontal,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(Icons.arrow_back),
-                      ),
-                      Text(
-                        'Select Subservice',
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
-                      )
-                    ],
-                  )),
+                direction: Axis.horizontal,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(Icons.arrow_back),
+                  ),
+                  Text(
+                    'Select Subservice',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  )
+                ],
+              )),
             ),
             Expanded(
               child: FutureBuilder(
@@ -118,22 +117,22 @@ class _SelectSubServiceState extends State<SelectSubService> {
                               child: Container(
                                 child: Column(
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0, 15, 0, 0),
-                                      child: FadeInImage.assetNetwork(
-                                        image: subservice.imagePath,
-                                        placeholder: '',
-                                        height: MediaQuery.of(context).size.width /4,
-                                        fadeInCurve: Curves.bounceIn,
-                                        fadeInDuration: const Duration(seconds: 1),
-                                        // subservice.imagePath,
-                                        // fit: BoxFit.fitWidth,
-                                        // width:
-                                        //     MediaQuery.of(context).size.width /
-                                        //         4,
-                                      ),
-                                    ),
+                                    // Padding(
+                                    //   padding: const EdgeInsets.fromLTRB(
+                                    //       0, 15, 0, 0),
+                                    //   child: FadeInImage.assetNetwork(
+                                    //     image: subservice.imagePath,
+                                    //     placeholder: '',
+                                    //     height: MediaQuery.of(context).size.width /4,
+                                    //     fadeInCurve: Curves.bounceIn,
+                                    //     fadeInDuration: const Duration(seconds: 1),
+                                    //     // subservice.imagePath,
+                                    //     // fit: BoxFit.fitWidth,
+                                    //     // width:
+                                    //     //     MediaQuery.of(context).size.width /
+                                    //     //         4,
+                                    //   ),
+                                    // ),
                                     Padding(
                                       padding: const EdgeInsets.all(5.0),
                                       child: Center(

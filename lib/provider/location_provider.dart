@@ -1,8 +1,7 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:it_delivery/helpers/env.dart';
-import 'package:http/http.dart' as http;
 import 'package:it_delivery/model/Location.dart';
+import 'package:it_delivery/network_utils/dio.dart';
 
 class LocationProvider with ChangeNotifier {
   Future<Map> store(Location location) async {
@@ -16,8 +15,8 @@ class LocationProvider with ChangeNotifier {
       'long': location.long.toString(),
     };
 
-    Response<Map> response = await Dio().post(url, data: body);
-    Map responseBody = response.data;
+    var response = await httpPost(url: url, data: body);
+    Map responseBody = response.body as Map;
 
     return responseBody;
   }
