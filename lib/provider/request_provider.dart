@@ -113,32 +113,22 @@ class RequestProvider with ChangeNotifier {
   //   });
   // }
 
-  Future<void> store(RequestFormModel request) async {
+  Future<void> store(request , files) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.get('token');
-
+  
     try {
       var data = {
         'service_id': request.serviceId,
         'subservice_id': request.subserviceId,
         'description': request.description,
         // 'location_id': request.location_id,
-        'mobile': request.mobile
+        'mobile': request.mobile,
+        'files' : files
       };
 
-    
-    
-      httpPostMultipart(url: 'request/store', token: token, data: data);
-
-      // Response<Map> response = await dio(token: token).post(
-      //   url,
-      //   data: formData,
-      //   options: Options(headers: {
-      //     "Content-Type": "application/json",
-      //   }),
-      // );
-      // Map responseBody = response.data;
-      // return responseBody;
+      httpPostMultipart(url: 'store_request',
+       token: token, data: data);
     } catch (e) {}
   }
 }

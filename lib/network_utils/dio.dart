@@ -10,7 +10,7 @@ Future<http.Response> httpGet({token, String url}) {
   };
 
   var fullUrl = baseUrl + url;
-  
+
   return http.get(
       Uri.parse(
         fullUrl,
@@ -39,9 +39,8 @@ Future<http.Response> httpPost({token, String url, data}) {
       body: data);
 }
 
-Future<void> httpPostMultipart({token, String url, data}) {
-  
-   Map<String, String> requestHeaders = {
+Future<void> httpPostMultipart({token, String url, data}) async {
+  Map<String, String> requestHeaders = {
     if (token != '' && token != null) 'Authorization': "Bearer " + token
   };
 
@@ -54,13 +53,24 @@ Future<void> httpPostMultipart({token, String url, data}) {
     ),
   );
 
+  request.headers.addAll(requestHeaders);
 
   // request.fields['subject'] = data['subject'];
-  print(data);
-  request.fields['service_id'] = data['service_id'];
+
+  request.fields['service_id'] = data['service_id'].toString();
   // request.fields['subservice_id'] = data['subservice_id'];
   request.fields['description'] = data['description'];
   // request.fields['location_id'] = data['location_id'];
-  request.fields['mobile'] = data['mobile'];
-  // request.send().then((response) => print(response));
+  request.fields['mobile'] = data['mobile'].toString();
+
+
+
+  data['files'].
+  forEach((file) async {
+    request.files.add(await http.MultipartFile.fromPath('attachments[]', file));
+  }); // files done
+
+  var response = await request.send();
+  final respStr = await response.stream.bytesToString();
+  print(respStr);
 }

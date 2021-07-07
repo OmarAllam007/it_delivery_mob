@@ -21,18 +21,21 @@ class RequestForm extends StatefulWidget {
 class _RequestFormState extends State<RequestForm> {
   final _formKey = GlobalKey<FormState>();
   RequestFormModel model;
+  List<String> files = [];
 
-  void _saveForm(request) async {
-    
+  void _saveForm() async {
+
     final isValid = _formKey.currentState.validate();
     if (!isValid) {
       return;
     }
-    _formKey.currentState.save();
 
+   
+
+    _formKey.currentState.save();
     try {
       await Provider.of<RequestProvider>(context, listen: false)
-          .store(request)
+          .store(model , files)
           .then((value) async {
         await showDialog(
           context: context,
@@ -54,7 +57,7 @@ class _RequestFormState extends State<RequestForm> {
           },
         );
 
-        request.files = [];
+        // request.files = [];
       });
     } catch (error) {
       await showDialog(
@@ -76,7 +79,9 @@ class _RequestFormState extends State<RequestForm> {
   }
 
   void _openFileExplorer() async {
+    // var files = [];
     try {
+      model.files = [];
       await FilePicker.platform.pickFiles(
           allowMultiple: true,
           type: FileType.custom,
@@ -87,10 +92,11 @@ class _RequestFormState extends State<RequestForm> {
             'pdf',
             'doc'
           ]).then((value) {
-        value.files.forEach((value){
-          // print(value.path);
-          model.files.add(value.path);
-        });
+         files = value.paths;
+        // value.files.forEach((value){
+        //   model.files.add(value.path);
+        // });
+        // model.files = files;
       });
     } on PlatformException catch (e) {
       print("Unsupported operation" + e.toString());
@@ -277,7 +283,7 @@ class _RequestFormState extends State<RequestForm> {
                         child: Text('Create Request'),
                       ),
                       onPressed: () {
-                        _saveForm(model);
+                        _saveForm();
                       },
                     ),
                   ),
