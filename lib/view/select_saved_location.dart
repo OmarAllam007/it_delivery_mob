@@ -44,11 +44,11 @@ class _SelectSavedLocationState extends State<SelectSavedLocation> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.pushNamed(context, SelectLocation.routeName,
-                    arguments: {
-                      'service': widget.service,
-                      'subservice': widget.subservice
-                    });
+                // Navigator.pushNamed(context, SelectLocation.routeName,
+                //     arguments: {
+                //       'service': widget.service,
+                //       'subservice': widget.subservice
+                //     });
               },
               icon: Icon(Icons.add_location_alt))
         ],

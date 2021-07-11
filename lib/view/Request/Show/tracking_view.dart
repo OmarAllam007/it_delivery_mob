@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:it_delivery/localization/translate.dart';
 import 'package:it_delivery/model/Request.dart';
 import 'package:timelines/timelines.dart';
 
@@ -27,7 +28,7 @@ class TrackingView extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          'Request Track',
+                          T(context,'Request Track'),
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
@@ -45,7 +46,7 @@ class TrackingView extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Request Received',
+                                T(context,'Request Received'),
                                 style: TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.bold),
                               ),
@@ -62,14 +63,14 @@ class TrackingView extends StatelessWidget {
                           height: height / 10,
                           child: TimelineNode(
                             indicator: DotIndicator(
-                              color: Colors.teal.shade800,
+                              color: Theme.of(context).backgroundColor,
                               child: Icon(
                                 Icons.check_circle_outline_rounded,
                                 color: Colors.white,
                               ),
                             ),
                             endConnector: SolidLineConnector(
-                              color: Colors.teal.shade800,
+                              color: Theme.of(context).backgroundColor,
                             ),
                           ),
                         ),
@@ -83,7 +84,7 @@ class TrackingView extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'In-process',
+                                T(context,'In-process'),
                                 style: TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.bold),
                               ),
@@ -107,7 +108,7 @@ class TrackingView extends StatelessWidget {
                               ),
                             ),
                             startConnector: SolidLineConnector(
-                              color: Colors.teal.shade800,
+                              color: Theme.of(context).backgroundColor,
                             ),
                             endConnector: SolidLineConnector(
                               color: Colors.deepOrange.shade900,
@@ -123,7 +124,7 @@ class TrackingView extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                'Completed',
+                                T(context,'Completed'),
                                 style: TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.bold),
                               ),
@@ -143,7 +144,7 @@ class TrackingView extends StatelessWidget {
                           child: TimelineNode(
                             indicator: DotIndicator(
                               color: request.status_id == 4
-                                  ? Colors.teal.shade800
+                                  ? Theme.of(context).backgroundColor
                                   : Colors.grey.shade300,
                               child: Icon(
                                 Icons.check_circle_outline_rounded,

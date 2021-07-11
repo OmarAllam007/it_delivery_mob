@@ -19,7 +19,7 @@ class NotificationProvider with ChangeNotifier {
       var token = prefs.get('token');
       
       var response = await httpGet(token: token, url: 'user/notifications');
-      print(response.body);
+      // print(response.body);
       final data = convert.jsonDecode(response.body);
 
       data.forEach((notification) {
@@ -37,14 +37,15 @@ class NotificationProvider with ChangeNotifier {
     }
   }
 
-  Future<void> readNotification($notificationId) async {
+  Future<void> readNotification(notificationId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.get('token');
-
+    // print(notificationId);
     await httpGet(
             token: token,
-            url: '/user/notifications/mark-as-read/${$notificationId}')
+            url: 'user/notifications/mark-as-read/$notificationId')
         .then((value) {
+      // print(value.body);
       return Future.value();
     }).onError((error, stackTrace) {
       return Future.error(error);

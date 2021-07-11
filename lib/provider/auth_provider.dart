@@ -27,7 +27,7 @@ class AuthProvider with ChangeNotifier {
   Future getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _token = prefs.get('token');
-    // print(_token);
+  
     if (_token == null) {
       return;
     }
@@ -143,7 +143,7 @@ class AuthProvider with ChangeNotifier {
 
       final response = await httpPost(url: url, data: data);
       var jsonResponse = convert.jsonDecode(response.body) as Map;
-      print(jsonResponse);
+      
       if (jsonResponse['error'] != '' && jsonResponse['error'] != null) {
         error = jsonResponse['error'];
         print(error);

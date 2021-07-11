@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:it_delivery/helpers/colors.dart';
 import 'package:it_delivery/localization/translate.dart';
 import 'package:it_delivery/model/Request.dart';
+import 'package:it_delivery/model/RequestFormModel.dart';
 import 'package:it_delivery/provider/request_provider.dart';
+import 'package:it_delivery/view/MainScreen.dart';
+import 'package:it_delivery/view/RequestsScreen.dart';
+import 'package:it_delivery/view/SelectLocation.dart';
 import 'package:provider/provider.dart';
 
 class RequestForm extends StatefulWidget {
@@ -24,58 +29,16 @@ class _RequestFormState extends State<RequestForm> {
   List<String> files = [];
 
   void _saveForm() async {
-
     final isValid = _formKey.currentState.validate();
     if (!isValid) {
       return;
     }
 
-   
+    model.serviceId = this.widget.serviceId;
+    model.subserviceId = this.widget.subServiceId;
 
     _formKey.currentState.save();
-    try {
-      await Provider.of<RequestProvider>(context, listen: false)
-          .store(model , files)
-          .then((value) async {
-        await showDialog(
-          context: context,
-          builder: (ctx) {
-            return AlertDialog(
-              content: Text(
-                T(context,'Request Created successfully'),
-                textAlign: TextAlign.center,
-              ),
-              actions: <Widget>[
-                TextButton(
-                  child: Text('Ok'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                )
-              ],
-            );
-          },
-        );
-
-        // request.files = [];
-      });
-    } catch (error) {
-      await showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: Text('An error occurred!'),
-          content: Text('Something went wrong.'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Okay'),
-              onPressed: () {
-                Navigator.of(ctx).pop();
-              },
-            )
-          ],
-        ),
-      );
-    }
+   
   }
 
   void _openFileExplorer() async {
@@ -92,7 +55,7 @@ class _RequestFormState extends State<RequestForm> {
             'pdf',
             'doc'
           ]).then((value) {
-         files = value.paths;
+        files = value.paths;
         // value.files.forEach((value){
         //   model.files.add(value.path);
         // });
@@ -106,16 +69,13 @@ class _RequestFormState extends State<RequestForm> {
   @override
   void didChangeDependencies() {
     model = new RequestFormModel(
-      serviceId: widget.serviceId,
-      subserviceId: widget.subServiceId
-    );
+        serviceId: widget.serviceId, subserviceId: widget.subServiceId);
 
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    
     final double statusBarHeight = MediaQuery.of(context).padding.top;
 
     return Scaffold(
@@ -158,33 +118,9 @@ class _RequestFormState extends State<RequestForm> {
                       children: [
                         Column(
                           children: [
-                            // TextFormField(
-                            //   decoration: InputDecoration(
-                            //     labelText: 'Subject',
-                            //     labelStyle:
-                            //         TextStyle(color: mainColor.shade900),
-                            //     enabledBorder: UnderlineInputBorder(
-                            //       borderSide:
-                            //           BorderSide(color: mainColor.shade900),
-                            //     ),
-                            //     focusedBorder: UnderlineInputBorder(
-                            //       borderSide:
-                            //           BorderSide(color: mainColor.shade900),
-                            //     ),
-                            //   ),
-                            //   validator: (value) {
-                            //     if (value == null || value.isEmpty) {
-                            //       return 'Subject is required';
-                            //     }
-                            //     return null;
-                            //   },
-                            //   onSaved: (value) {
-                            //     requestModal.subject = value;
-                            //   },
-                            // ),
                             TextFormField(
                               decoration: InputDecoration(
-                                labelText: 'Description',
+                                labelText: T(context,'Description'),
                                 labelStyle:
                                     TextStyle(color: mainColor.shade900),
                                 enabledBorder: UnderlineInputBorder(
@@ -201,7 +137,7 @@ class _RequestFormState extends State<RequestForm> {
                               minLines: 2,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Description is required';
+                                  return T(context,'Description is required');
                                 }
                                 return null;
                               },
@@ -211,7 +147,7 @@ class _RequestFormState extends State<RequestForm> {
                             ),
                             TextFormField(
                               decoration: InputDecoration(
-                                labelText: 'Mobile',
+                                labelText: T(context,'Mobile'),
                                 labelStyle:
                                     TextStyle(color: mainColor.shade900),
                                 enabledBorder: UnderlineInputBorder(
@@ -225,7 +161,7 @@ class _RequestFormState extends State<RequestForm> {
                               ),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Mobile is required';
+                                  return T(context,'Mobile is required');
                                 }
                                 return null;
                               },
@@ -250,7 +186,7 @@ class _RequestFormState extends State<RequestForm> {
                                         width: 2.0,
                                       ),
                                       Center(
-                                        child: Text('Upload Images'),
+                                        child: Text(T(context,'Upload Images')),
                                       ),
                                     ],
                                   ),
@@ -269,6 +205,9 @@ class _RequestFormState extends State<RequestForm> {
               ),
             ),
             Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+              ),
               child: SizedBox(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
@@ -277,13 +216,23 @@ class _RequestFormState extends State<RequestForm> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary: Theme.of(context).buttonColor, // background
-                        onPrimary: Colors.white, // foreground
+                        onPrimary: Colors.white,
+                        // foreground
                       ),
                       child: Center(
-                        child: Text('Create Request'),
+                        child: Text(T(context,'Create Request')),
                       ),
                       onPressed: () {
                         _saveForm();
+                      
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SelectLocation(
+                                    model: this.model,
+                                    files:this.files,
+                                  )),
+                        );
                       },
                     ),
                   ),
@@ -295,18 +244,4 @@ class _RequestFormState extends State<RequestForm> {
       ),
     );
   }
-}
-
-class RequestFormModel {
-  var serviceId;
-  var subserviceId;
-  String description;
-  String mobile;
-  List files;
-  RequestFormModel(
-      {this.description,
-      this.mobile,
-      this.files,
-      this.serviceId,
-      this.subserviceId,});
 }

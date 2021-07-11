@@ -48,7 +48,7 @@ class RequestProvider with ChangeNotifier {
 
   Future<void> getRequests({currentPage}) async {
     try {
-      print(this.filterType);
+      
       _requests = [];
       final url = 'request?page=$currentPage&filterType=${this.filterType}';
 
@@ -72,6 +72,10 @@ class RequestProvider with ChangeNotifier {
             created_date: item['created_at'],
             close_date: item['close_date'],
             last_updated_date: item['updated_at'],
+            arServiceDesc: item['ar_serviceDesc'],
+            arSubserviceDesc: item['ar_subserviceDesc'],
+            // serviceId: item['service_id'],
+            // subserviceId: item['subservice_id']
           ),
         );
       });
@@ -116,16 +120,18 @@ class RequestProvider with ChangeNotifier {
   Future<void> store(request , files) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.get('token');
-  
+    
     try {
       var data = {
         'service_id': request.serviceId,
         'subservice_id': request.subserviceId,
         'description': request.description,
-        // 'location_id': request.location_id,
+        'lat':request.lat,
+        'long':request.long,
         'mobile': request.mobile,
         'files' : files
       };
+      
 
       httpPostMultipart(url: 'store_request',
        token: token, data: data);

@@ -6,7 +6,8 @@ class Subservice {
 
   @required
   final String name;
+  final String arName;
   final String imagePath;
 
-  Subservice({this.id, this.name, this.imagePath});
+  Subservice({this.id, this.name, this.arName, this.imagePath});
 }

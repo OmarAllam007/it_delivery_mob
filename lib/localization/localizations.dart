@@ -24,14 +24,14 @@ class MasterLocalizations {
 
     // if (true) {
     final response = await httpGet(url: 'translation/${locale.languageCode}');
-
+    
     if (response.statusCode == 200) {
       var jsonResponse = convert.jsonDecode(response.body) as List<dynamic>;
 
       final words = jsonResponse;
 
-      // _localizedValues = Map.fromIterable(words,
-      //     key: (e) => e['word'], value: (e) => e['translation']);
+      _localizedValues = Map.fromIterable(words,
+          key: (e) => e['word'], value: (e) => e['translation']);
     } else {
       _localizedValues = {};
     }
@@ -41,6 +41,7 @@ class MasterLocalizations {
   }
 
   String getTranslatedValue(String key) {
+    
     return _localizedValues[key] ?? key;
   }
 }
@@ -51,7 +52,7 @@ class DemoLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      ['en', 'ar', 'in', 'ur', 'nep'].contains(locale.languageCode);
+      ['en', 'ar'].contains(locale.languageCode);
 
   @override
   Future<MasterLocalizations> load(Locale locale) async {

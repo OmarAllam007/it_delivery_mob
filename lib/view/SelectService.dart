@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:it_delivery/localization/translate.dart';
+import 'package:it_delivery/model/RequestFormModel.dart';
 import 'package:it_delivery/model/Service.dart';
+import 'package:it_delivery/network_utils/api.dart';
 import 'package:it_delivery/provider/services_provider.dart';
 import 'package:it_delivery/view/Custom/Loader.dart';
 import 'package:it_delivery/view/RequestForm.dart';
+import 'package:it_delivery/view/SelectLocation.dart';
 import 'package:it_delivery/view/SelectSubservice.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +20,7 @@ class SelectService extends StatefulWidget {
 class _SelectServiceState extends State<SelectService> {
   Future<List<Service>> serviceList;
 
+  RequestFormModel model;
   Future<void> getList() async {
     final provider = Provider.of<ServicesProvider>(context, listen: false);
     final list = provider.getServices();
@@ -26,11 +30,16 @@ class _SelectServiceState extends State<SelectService> {
     });
   }
 
+  var language = 'en';
+
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
       getList();
+      Locale myLocale = Localizations.localeOf(context);
+
+      language = myLocale.languageCode;
     });
   }
 
@@ -86,21 +95,25 @@ class _SelectServiceState extends State<SelectService> {
                           padding: const EdgeInsets.all(15.0),
                           child: GestureDetector(
                             onTap: () {
-                              print(service);
+                              
                               if (service.subServices.length > 0) {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => SelectSubService(
-                                          subservices: service.subServices)),
+                                    builder: (context) => SelectSubService(
+                                      subservices: service.subServices,
+                                      language: language,
+                                    ),
+                                  ),
                                 );
                               } else {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => RequestForm(
-                                            serviceId: service.id,
-                                          )),
+                                    builder: (context) => RequestForm(
+                                      serviceId: service.id,
+                                    ),
+                                  ),
                                 );
                               }
                             },
@@ -115,11 +128,28 @@ class _SelectServiceState extends State<SelectService> {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
+                                    Container(
+                                      height:
+                                          MediaQuery.of(context).size.width / 7,
+                                      width:
+                                          MediaQuery.of(context).size.width / 7,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: NetworkImage(
+                                            service.imagePath,
+                                          ),
+                                          //whatever image you can put here
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
                                     Padding(
                                       padding: const EdgeInsets.all(5.0),
                                       child: Center(
                                         child: Text(
-                                          service.name,
+                                          language == 'ar'
+                                              ? service.arName
+                                              : service.name,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               color: Colors.teal.shade900,

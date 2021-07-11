@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:it_delivery/localization/translate.dart';
 import 'package:it_delivery/model/Notification.dart';
 import 'package:it_delivery/provider/notification_provider.dart';
 import 'package:it_delivery/view/Custom/Loader.dart';
@@ -97,7 +98,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                                   Padding(
                                     padding: EdgeInsets.all(20),
                                     child: Text(
-                                      'No Notifications found',
+                                      T(context,'No Notifications found'),
                                       style: TextStyle(
                                         color: Colors.grey.shade600,
                                         fontSize: 20,

@@ -1,11 +1,11 @@
-
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:it_delivery/model/Request.dart';
-import 'package:it_delivery/model/Service.dart';
-import 'package:it_delivery/model/Subservice.dart';
-import 'package:it_delivery/view/SelectLocationWidget.dart';
+import 'package:it_delivery/localization/translate.dart';
+import 'package:it_delivery/model/RequestFormModel.dart';
+import 'package:it_delivery/provider/request_provider.dart';
+import 'package:it_delivery/view/MainScreen.dart';
+import 'package:provider/provider.dart';
 
 Future<Position> _determinePosition() async {
   bool serviceEnabled;
@@ -37,7 +37,10 @@ Future<Position> _determinePosition() async {
 
 class SelectLocation extends StatefulWidget {
   static const routeName = '/select-location';
+  final RequestFormModel model;
+  final files;
 
+  SelectLocation({Key key, this.model, this.files}) : super(key: key);
   @override
   _SelectLocationState createState() => _SelectLocationState();
 }
@@ -52,15 +55,9 @@ class _SelectLocationState extends State<SelectLocation>
   List<Marker> markers = [];
   GoogleMapController gmc;
 
-  LocationTypes _type = LocationTypes.home;
-
-  double lat;
-  double long;
-  String label;
-  int type;
-
   String serviceId;
   String subserviceId;
+  RequestFormModel newModel;
 
   @override
   void initState() {
@@ -70,20 +67,64 @@ class _SelectLocationState extends State<SelectLocation>
   @override
   void didChangeDependencies() {
     _future = _determinePosition();
+    this.newModel = this.widget.model;
     super.didChangeDependencies();
+  }
+
+  Future<void> createRequest() async {
+    try {
+      await Provider.of<RequestProvider>(context, listen: false)
+          .store(this.newModel, this.widget.files)
+          .then((value) async {
+        await showDialog(
+          context: context,
+          builder: (ctx) {
+            return AlertDialog(
+              content: Text(
+                T(context, 'Request Created successfully'),
+                textAlign: TextAlign.center,
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text(T(context, 'Ok')),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MainScreen(),
+                      ),
+                    );
+                  },
+                )
+              ],
+            );
+          },
+        );
+      });
+    } catch (error) {
+      await showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text('An error occurred!'),
+          content: Text('Something went wrong.'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Okay'),
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+            )
+          ],
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context).settings.arguments as Map;
-    var service = args['service'] as Service;
-    var subservice = args['subservice'] as Subservice;
-
-    this.serviceId = service.id.toString();
-    this.subserviceId = subservice.id.toString();
-
     final appBar = AppBar(
-      title: Text('Select Location'),
+      title: Text(T(context, 'Select Location')),
       backgroundColor: Colors.teal[800],
     );
     final minHeight = MediaQuery.of(context).size.height -
@@ -96,6 +137,8 @@ class _SelectLocationState extends State<SelectLocation>
         builder: (context, AsyncSnapshot<Position> snapshot) {
           if (snapshot.connectionState == ConnectionState.done &&
               snapshot.hasData) {
+            this.newModel.lat = snapshot.data.latitude;
+            this.newModel.long = snapshot.data.longitude;
             _CurrentLocationMarker(
                 snapshot.data.latitude, snapshot.data.longitude);
             return ConstrainedBox(
@@ -136,9 +179,10 @@ class _SelectLocationState extends State<SelectLocation>
                         ),
                       ),
                       onPressed: () {
-                        _showSaveLocationForm(context);
+                        createRequest();
+                        // _showSaveLocationForm(context);
                       },
-                      child: Text('Save Location'),
+                      child: Text(T(context, 'Create Request')),
                     ),
                     alignment: Alignment.bottomCenter,
                   )
@@ -158,8 +202,8 @@ class _SelectLocationState extends State<SelectLocation>
   }
 
   void _CurrentLocationMarker(lat, long) {
-    this.lat = lat;
-    this.long = long;
+    // this.lat = lat;
+    // this.long = long;
     final MarkerId markerId = MarkerId("MLocation");
     Marker marker = Marker(
       markerId: markerId,
@@ -169,8 +213,8 @@ class _SelectLocationState extends State<SelectLocation>
         long,
       ),
       onDragEnd: (position) {
-        this.lat = position.latitude;
-        this.long = position.longitude;
+        this.newModel.lat = position.latitude;
+        this.newModel.long = position.longitude;
       },
       infoWindow: InfoWindow(
         title: "My Location",
@@ -188,18 +232,18 @@ class _SelectLocationState extends State<SelectLocation>
     });
   }
 
-  void _showSaveLocationForm(BuildContext context) {
-    RequestModel form = new RequestModel();
-    form.service = this.serviceId;
-    form.subservice = this.subserviceId;
+  // void _showSaveLocationForm(BuildContext context) {
+  //   RequestModel form = new RequestModel();
+  //   form.service = this.serviceId;
+  //   form.subservice = this.subserviceId;
 
-    var alert = showDialog(
-        context: context,
-        builder: (ctx) {
-          return SelectLocationWidget(
-            location: LatLng(this.lat, this.long),
-            form: form,
-          );
-        });
-  }
+  //   var alert = showDialog(
+  //       context: context,
+  //       builder: (ctx) {
+  //         return SelectLocationWidget(
+  //           location: LatLng(this.lat, this.long),
+  //           form: form,
+  //         );
+  //       });
+  // }
 }

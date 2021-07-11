@@ -1,6 +1,7 @@
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:it_delivery/localization/translate.dart';
+import 'package:it_delivery/main.dart';
 import 'package:it_delivery/modal/change_language.dart';
 import 'package:it_delivery/provider/auth_provider.dart';
 import 'package:provider/provider.dart';
@@ -128,61 +129,61 @@ class _UserProfileState extends State<UserProfile> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        height: MediaQuery.of(context).size.height / 2,
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 14),
-                            child: Container(
-                              width: double.infinity,
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      T(context, 'Locations'),
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: locations.length != 0
-                                        ? ListView.builder(
-                                            itemCount: locations.length,
-                                            itemBuilder: (ctx, index) {
-                                              return Row(
-                                                children: [
-                                                  IconButton(
-                                                      icon: Icon(
-                                                        Icons.location_on,
-                                                        color: Colors.teal,
-                                                      ),
-                                                      onPressed: null),
-                                                  Text(locations[index]
-                                                          ['title'] ??
-                                                      '')
-                                                ],
-                                              );
-                                            },
-                                          )
-                                        : Text(
-                                            T(context, 'No locations saved'),
-                                          ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(8.0),
+                    //   child: Container(
+                    //     height: MediaQuery.of(context).size.height / 2,
+                    //     child: Card(
+                    //       shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(15),
+                    //       ),
+                    //       child: Padding(
+                    //         padding: const EdgeInsets.symmetric(
+                    //             horizontal: 16, vertical: 14),
+                    //         child: Container(
+                    //           width: double.infinity,
+                    //           child: Column(
+                    //             children: [
+                    //               Padding(
+                    //                 padding: const EdgeInsets.all(8.0),
+                    //                 child: Text(
+                    //                   T(context, 'Locations'),
+                    //                   style: TextStyle(
+                    //                       fontSize: 16,
+                    //                       fontWeight: FontWeight.bold),
+                    //                 ),
+                    //               ),
+                    //               Expanded(
+                    //                 child: locations.length != 0
+                    //                     ? ListView.builder(
+                    //                         itemCount: locations.length,
+                    //                         itemBuilder: (ctx, index) {
+                    //                           return Row(
+                    //                             children: [
+                    //                               IconButton(
+                    //                                   icon: Icon(
+                    //                                     Icons.location_on,
+                    //                                     color: Colors.teal,
+                    //                                   ),
+                    //                                   onPressed: null),
+                    //                               Text(locations[index]
+                    //                                       ['title'] ??
+                    //                                   '')
+                    //                             ],
+                    //                           );
+                    //                         },
+                    //                       )
+                    //                     : Text(
+                    //                         T(context, 'No locations saved'),
+                    //                       ),
+                    //               ),
+                    //             ],
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -190,6 +191,7 @@ class _UserProfileState extends State<UserProfile> {
                           width: MediaQuery.of(context).size.width * 0.9,
                           child: TextButton(
                             onPressed: () async {
+                            
                               userProfile.logout();
                             },
                             child: Text(

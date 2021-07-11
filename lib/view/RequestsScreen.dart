@@ -54,31 +54,8 @@ class _RequestsScreenState extends State<RequestsScreen> {
     }
   }
 
-  // void dispose() {
-  //   _pagingController.dispose();
-  //   super.dispose();
-  // }
-
-  // final scrollController = ScrollController();
-  // RequestProvider provider = RequestProvider();
   int selectedIndex = 0;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  // }
-
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-
-  //   scrollController.addListener(() {
-  //     if (scrollController.position.maxScrollExtent ==
-  //         scrollController.offset) {
-  //       provider.loadMore();
-  //     }
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +117,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
-                        height: 40,
+                        height: MediaQuery.of(context).size.height / 18,
                         child: ListView(
                           scrollDirection: Axis.horizontal,
                           children: <Widget>[

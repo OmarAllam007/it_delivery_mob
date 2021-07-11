@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:it_delivery/localization/translate.dart';
 import 'package:it_delivery/model/Service.dart';
 import 'package:it_delivery/model/Subservice.dart';
 import 'package:it_delivery/provider/auth_provider.dart';
@@ -8,8 +9,9 @@ import 'package:provider/provider.dart';
 class SelectSubService extends StatefulWidget {
   static const routeName = '/select-subservice';
   final List subservices;
-
-  const SelectSubService({Key key, this.subservices}) : super(key: key);
+  final language;
+  const SelectSubService({Key key, this.subservices, this.language})
+      : super(key: key);
   @override
   _SelectSubServiceState createState() => _SelectSubServiceState();
 }
@@ -23,24 +25,17 @@ class _SelectSubServiceState extends State<SelectSubService> {
   @override
   void didChangeDependencies() {
     subServiceList = widget.subservices.map((service) {
+      
       return Subservice(
         id: service['id'],
         name: service['name'],
+        arName: service['ar_name'],
         imagePath: service['image_path'],
       );
     }).toList();
 
     super.didChangeDependencies();
   }
-
-  // Future<void> getList() async {
-  //   final provider = Provider.of<ServicesProvider>(context, listen: false);
-  //   final list = provider.getSubservices(service.id);
-
-  //   setState(() {
-  //     serviceList = list;
-  //   });
-  // }
 
   @override
   void initState() {
@@ -72,7 +67,7 @@ class _SelectSubServiceState extends State<SelectSubService> {
                     icon: Icon(Icons.arrow_back),
                   ),
                   Text(
-                    'Select Subservice',
+                    T(context, 'Select Subservice'),
                     style: TextStyle(
                       fontSize: 16,
                     ),
@@ -94,7 +89,7 @@ class _SelectSubServiceState extends State<SelectSubService> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => SelectSavedLocation(
-                            locations: locations,
+                            locations: [],
                             service: service,
                             subservice: subservice,
                           ),
@@ -132,7 +127,10 @@ class _SelectSubServiceState extends State<SelectSubService> {
                               padding: const EdgeInsets.all(5.0),
                               child: Center(
                                 child: Text(
-                                  subservice.name,
+                                
+                                 this.widget.language == 'ar'
+                                      ? subservice.arName
+                                      : subservice.name,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Colors.teal.shade900,

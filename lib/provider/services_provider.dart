@@ -38,11 +38,11 @@ class ServicesProvider with ChangeNotifier {
       await callUrl(url: 'services').then((data) {
         data.forEach((service) {
           _services.add(Service(
-            id: service['id'],
-            name: service['name'],
-            imagePath: service['image_path'],
-            subServices: service['subservices']
-          ));
+              id: service['id'],
+              name: service['name'],
+              arName: service['ar_name'],
+              imagePath: service['image_path'],
+              subServices: service['subservices']));
         });
       });
 
@@ -55,15 +55,13 @@ class ServicesProvider with ChangeNotifier {
   Future<List<Subservice>> getSubservices(serviceId) async {
     _subservices = [];
 
-    print(serviceId);
     try {
       await callUrl(url: 'subservices/$serviceId').then((data) {
         data.forEach((service) {
-          print(service);
-          print(serviceId);
           _subservices.add(Subservice(
               id: service['id'],
               name: service['name'],
+              arName: service['ar_name'],
               imagePath: service['image_path']));
         });
       });

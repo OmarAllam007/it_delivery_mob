@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:it_delivery/localization/translate.dart';
+import 'package:it_delivery/model/Request.dart';
 import 'package:it_delivery/view/Request/Show/tracking_view.dart';
+import 'dart:convert' as convert;
 
 class ShowRequest extends StatefulWidget {
   static const routeName = 'show-request';
@@ -11,24 +14,34 @@ class ShowRequest extends StatefulWidget {
 }
 
 class _ShowRequestState extends State<ShowRequest> {
+  var language = 'en';
+
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () {
+      Locale myLocale = Localizations.localeOf(context);
+
+      language = myLocale.languageCode;
+    });
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
-
     var request = widget.request;
-    // final args = ModalRoute.of(context).settings.arguments as Map;
-    // var request = args['request'] as RequestModel;
 
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'Request #' + request.id.toString(),
+          T(context, 'Request') + '#' + request.id.toString(),
           style: TextStyle(
             color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.teal.shade800,
+        backgroundColor: Theme.of(context).backgroundColor,
       ),
       body: Container(
         height: height,
@@ -59,10 +72,11 @@ class _ShowRequestState extends State<ShowRequest> {
                       children: [
                         Icon(
                           Icons.check_circle,
-                          color: Colors.teal.shade800,
+                          color: Theme.of(context).backgroundColor
                         ),
+                        SizedBox(width:2.0),
                         Text(
-                          request.status,
+                          T(context, request.status),
                           style: TextStyle(fontSize: 16),
                         ),
                       ],
@@ -116,8 +130,25 @@ class _ShowRequestState extends State<ShowRequest> {
                                   child: Row(
                                     children: [
                                       Icon(Icons.apps),
-                                      Text(
-                                          '${request.serviceDesc} > ${request.subserviceDesc}')
+                                      language == 'en'
+                                          ? Text(
+                                              '${request.serviceDesc}' +
+                                                  (request.subserviceDesc ==
+                                                          'Not assigned'
+                                                      ? ''
+                                                      : ' < ' +
+                                                          request
+                                                              .subserviceDesc),
+                                            )
+                                          : Text(
+                                              '${request.arServiceDesc}' +
+                                                  (request.arSubserviceDesc ==
+                                                          'Not assigned'
+                                                      ? ''
+                                                      : ' < ' +
+                                                          request
+                                                              .arSubserviceDesc),
+                                            ),
                                     ],
                                   ),
                                 ),
@@ -152,7 +183,7 @@ class _ShowRequestState extends State<ShowRequest> {
                     Expanded(
                       flex: 1,
                       child: Container(
-                        height: height * 0.30,
+                        // height: height * 0.30,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
@@ -162,11 +193,12 @@ class _ShowRequestState extends State<ShowRequest> {
                                 width: double.infinity,
                                 child: TextButton(
                                   style: ButtonStyle(
-                                      foregroundColor:
-                                          MaterialStateProperty.all(
-                                              Colors.red.shade800)),
+                                    foregroundColor: MaterialStateProperty.all(
+                                      Colors.red.shade800,
+                                    ),
+                                  ),
                                   onPressed: () {},
-                                  child: const Text('Cancel the request'),
+                                  child:  Text(T(context,'Cancel the request')),
                                 ),
                               ),
                             ],

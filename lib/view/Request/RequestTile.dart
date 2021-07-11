@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:it_delivery/localization/translate.dart';
 import 'package:it_delivery/view/ShowRequest.dart';
 
 class RequestTile extends StatelessWidget {
@@ -47,7 +48,8 @@ class RequestTile extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.all(5.0),
                               child: Text(
-                                'Request #${request.id.toString()}',
+                                T(context, 'Request') +
+                                    '#${request.id.toString()}',
                                 style: TextStyle(
                                     color: Colors.teal.shade800,
                                     fontSize: 16,
@@ -110,7 +112,8 @@ class RequestTile extends StatelessWidget {
                                 child: Hero(
                                   tag: request.id,
                                   child: Text(
-                                    request.status ?? 'not exist',
+                                    T(context, request.status) ??
+                                        T(context, 'not exist'),
                                     style: TextStyle(
                                       color: Colors.teal.shade800,
                                       fontSize: 16,
